@@ -31,35 +31,28 @@ function fsalir(){
 @section('contenido')
 <?php
 if (isset($msg)){
-    echo '<div id="msg"></div>';
+    echo '<div id= "msg"></div>';
     echo '<script>msgShow("' . $msg["MSG"] . '","' . $msg["ESTADO"] . '")</script>';
-}
+    }
+    ?>
 
-?>
-<div class="panel-body"></div>
-<div id="msg"></div>
-<?php
-if (isset($msg)){
-    echo '<script>msgShow("' . $msg["MSG"] . '","' . $msg["ESTADO"] . '")</script>';
-}
-?>
+<div class="panel-body">
+    <div id="msg"></div>
+    <?php
+    if (isset($msg)){
+        echo '<script>msgShow("' . $msg["MSG"] . '""' . $msg["ESTADO"] .'")</script>';
+    }
+    ?>
 <form id="form1" method="POST">
-    <div class="row">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
-        <input type="hidden" id="id" name="id" class="form-control" value="{{$global"></input>
-            <div class="form-group col-lg-6">
-                 <label>Nombre:</label>
-                 <input type="text" id="txtNombre" name="txtNombre" class="form-control">
-            </div> 
-            <div class="form-group col-lg-6">
-                <label>Men&uacute; padre:</label>
-                <select name="lstMenuPadre" id="lstMenuPadre"class="form-control"></select>
-                <option selected value=""></option>
-
-                @for ($i =0; $i; < count ($array_menu); $i++)
-                @if (isset($menu) and $array_menu[$i]->idmenu == $menu->id_padre)
-                <option selected value="{{ $array_menu[$i]">
-            </div>
-    </div>
+            <div class="row">
+                <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
+                <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
+                <div class="form-group col-lg-12">
+                <label>Categoria: *</label>
+                    <select type="lst" id="lstCategoria" name="lstCategoria" class="form-control" value="" required></select>
+                </div>
+                   
+               </div>
 </form>
+
 @endsection

@@ -49,16 +49,29 @@ if (isset($msg)){
                 <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                 <div class="form-group col-lg-12">
                 <label>Descripcion: *</label>
-                    <input type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="" required>
+                    <textarea type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="" required></textarea>
                 </div>
                     <div class="form-group col-lg-12">
                     <label>Fecha: *</label>
-                    <input type="text" id="txtFecha" name="txtFecha" class="form-control" value="" required>
+                    <input type="date" id="txtFecha" name="txtFecha" class="form-control" value="" required>
+                </div>
+                
+                <div class="form-group col-lg-12">
+                <label>Sucursal: *</label>
+                    <select type="lst" id="lstEstado" name="lstEstado" class="form-control" value="" required></select>
+                </div>
+                <div class="form-group col-lg-12">
+                <label>Cliente: *</label>
+                    <select type="lst" id="lstCliente" name="lstCliente" class="form-control" value="" required></select>
+                </div>
+                <div class="form-group col-lg-12"> <label>Estado: *</label>
+                    <select type="lst" id="lstEstado" name="lstEstado" class="form-control" value="" required></select>
                 </div>
                 <div class="form-group col-lg-12">
                 <label>Total: *</label>
-                    <input type="text" id="txtTotal" name="txtTotal" class="form-control" value="" required>
+                    <input type="number" id="txtTotal" name="txtTotal" class="form-control" value="" required>
                 </div>
+               
 </div>
 </form>
 

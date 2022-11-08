@@ -59,6 +59,10 @@ if (isset($msg)){
                 <label>Direccion: *</label>
                     <input type="text" id="txtDireccion" name="txtDireccion" class="form-control" value="" required>
                 </div>
+                <diinputv class="form-group col-lg-12">
+                <label>Mapa: *</label>
+                    < type="text" id="txtMapa" name="txtMapa" class="form-control" value="" required>
+                </div>
 </div>
 </form>
 

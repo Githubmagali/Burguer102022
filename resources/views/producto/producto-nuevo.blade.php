@@ -59,6 +59,10 @@ if (isset($msg)){
                 <label>Precio: *</label>
                     <input type="text" id="txtPrecio" name="txtPrecio" class="form-control" value="" required>
                 </div>
+                <div class="form-group col-lg-12">
+                <label>Categoria: *</label>
+                    <select type="lst" id="lstCategoria" name="lstCategoria" class="form-control" value="" required></select>
+                </div>
 </div>
 </form>
 

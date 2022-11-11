@@ -6,7 +6,7 @@ use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Cliente extends Model{
-      protected $table ='carrito';
+      protected $table ='carritos';
       public $timestamps = false;
 
       protected $fillable = [
@@ -17,6 +17,13 @@ class Cliente extends Model{
       protected $hidden = [
 
       ];
+      public function cargarDesdeRequest($request)
+      {
+          $this->idcarrito = $request->input('id') != "0" ? $request->input('id') : $this->idcarrito;
+          $this->fk_idcliente= $request->input('lstCliente');
+         
+          
+      }
 
       public function insertar ()
 {
@@ -69,7 +76,7 @@ public function guardar() {
         $sql = "SELECT
                   A.idcarrito,
                   A.fk_idcliente
-                FROM carritos ORDER BY idcarrito";
+                FROM carritos A ORDER BY idcarrito";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
     }

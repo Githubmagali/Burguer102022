@@ -5,8 +5,8 @@ namespace App\Entidades;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 
-class Categorias extends Model{
-      protected $table ='categoria';
+class Categoria extends Model{
+      protected $table ='categorias';
       public $timestamps = false;
 
       protected $fillable = [
@@ -17,11 +17,18 @@ class Categorias extends Model{
       protected $hidden = [
 
       ];
+      public function cargarDesdeRequest($request)
+      {
+          $this->idcategoria = $request->input('id') != "0" ? $request->input('id') : $this->idcategoria;
+          $this->nombre= $request->input('txtNombre');
+         
+          
+      }
 
       public function insertar ()
 {
       $sql = "INSERT INTO $this->table (
-          'nombre'
+          nombre
             ) VALUES (?);";
 
             $result = DB:: insert ($sql,
@@ -68,7 +75,7 @@ public function guardar() {
         $sql = "SELECT
                   A.idcategoria,
                   A.nombre
-                FROM categorias ORDER BY idcategoria";
+                FROM categorias A ORDER BY idcategoria";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
     }

@@ -10,7 +10,7 @@
 @section('breadcrumb')
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/home">Inicio</a></li>
-    <li class="breadcrumb-item"><a href="/admin/postulacion">Postulacion</a></li>
+    <li class="breadcrumb-item"><a href="/admin/postulaciones">Postulacion</a></li>
     <li class="breadcrumb-item active">Modificar</li>
 </ol>
 <ol class="toolbar">
@@ -61,5 +61,41 @@ if (isset($msg)){
                 </div>
 </div>
 </form>
+<script>
+
+    $("#form1").validate();
+
+    function guardar() {
+        if ($("#form1").valid()) {
+            modificado = false;
+            form1.submit();
+        } else {
+            $("#modalGuardar").modal('toggle');
+            msgShow("Corrija los errores e intente nuevamente.", "danger");
+            return false;
+        }
+    }
+
+    function eliminar() {
+        $.ajax({
+            type: "GET",
+            url: "{{ asset('admin/postulacion/eliminar') }}",
+            data: { id:globalId },
+            async: true,
+            dataType: "json",
+            success: function (data) {
+                if (data.err = "0") {
+                    msgShow("Registro eliminado exitosamente.", "success");
+                    $("#btnEnviar").hide();
+                    $("#btnEliminar").hide();
+                    $('#mdlEliminar').modal('toggle');
+                } else {
+                    msgShow("Error al eliminar", "success");
+                }
+            }
+        });
+    }
+
+</script>
 
 @endsection

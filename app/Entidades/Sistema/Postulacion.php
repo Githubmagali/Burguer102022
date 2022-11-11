@@ -6,7 +6,7 @@ use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Postulacion extends Model{
-      protected $table ='postulacion';
+      protected $table ='postulaciones';
       public $timestamps = false;
 
       protected $fillable = [
@@ -21,15 +21,25 @@ class Postulacion extends Model{
       protected $hidden = [
 
       ];
-
+      public function cargarDesdeRequest($request)
+      {
+          $this->idpostulacion = $request->input('id') != "0" ? $request->input('id') : $this->idpostulacion;
+          $this->nombre = $request->input('txtNombre');
+          $this->apellido= $request->input('txtApellido');
+          $this->celular= $request->input('txtCelular');
+          $this->correo= $request->input('txtCorreo');
+          $this->curriculum= $request->input('txtCurriculum');
+         
+          
+      }
       public function insertar ()
 {
       $sql = "INSERT INTO $this->table (
-        'nombre',
-        'apellido',
-        'celular',
-        'correo',
-        'curriculum'
+        nombre,
+        apellido,
+        celular,
+        correo,
+        curriculum
             ) VALUES (?,?,?,?,?);";
 
             $result = DB:: insert ($sql,
@@ -40,7 +50,7 @@ class Postulacion extends Model{
                   $this->correo,
                   $this->curriculum
             ]);
-            return $this->idcliente = DB:: getPdo()->lastInstertId();
+            return $this->idpostulacion = DB:: getPdo()->lastInstertId();
 }
 public function guardar() {
       $sql = "UPDATE $this->table SET

@@ -6,7 +6,7 @@ use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Pedido_producto extends Model{
-      protected $table ='pedido_producto';
+      protected $table ='pedido_productos';
       public $timestamps = false;
 
       protected $fillable = [
@@ -21,15 +21,26 @@ class Pedido_producto extends Model{
       protected $hidden = [
 
       ];
+      public function cargarDesdeRequest($request)
+      {
+          $this->idpedido_producto = $request->input('id') != "0" ? $request->input('id') : $this->idpedido_producto;
+          $this->fk_idpedido = $request->input('lstPedido');
+          $this->producto = $request->input('lstProducto');
+          $this->cantidad= $request->input('txtCantidad');
+          $this->precio_unitario= $request->input('txtPrecio_unitario');
+          $this->total= $request->input('txtTotal');
+          
+          
+      }
 
       public function insertar ()
 {
       $sql = "INSERT INTO $this->table (
           fk_idpedido,
           fk_idproducto,
-          'cantidad',
-          'precio_unitario',
-          'total'
+          cantidad,
+          precio_unitario,
+          total
             ) VALUES (?,?,?,?,?);";
 
             $result = DB:: insert ($sql,
@@ -80,7 +91,7 @@ public function guardar() {
         $sql = "SELECT
                   A.idpedido_producto,
                   A.nombre
-                FROM pedido_productos BY idpedido_producto";
+                FROM pedido_productos A BY idpedido_producto";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
     }

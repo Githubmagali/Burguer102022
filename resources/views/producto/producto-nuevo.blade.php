@@ -10,7 +10,7 @@
 @section('breadcrumb')
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/home">Inicio</a></li>
-    <li class="breadcrumb-item"><a href="/admin/producto">Productos</a></li>
+    <li class="breadcrumb-item"><a href="/admin/productos">Productos</a></li>
     <li class="breadcrumb-item active">Modificar</li>
 </ol>
 <ol class="toolbar">
@@ -61,9 +61,56 @@ if (isset($msg)){
                 </div>
                 <div class="form-group col-lg-12">
                 <label>Categoria: *</label>
-                    <select type="lst" id="lstCategoria" name="lstCategoria" class="form-control" value="" required></select>
+                    <select type="lst" id="lstCategoria" name="lstCategoria" class="form-control selectpicker" data-live-search="true" value="" required>
+                <option value="" disabled selected>Seleccionar</option>
+            </select>
                 </div>
+                <div class="form-group col-lg-12">
+                    <label>Imagen: </label>
+                    <input type="file" id="imagen" name="imagen" class="form-control-file">
+                    <img src="" alt="">
+                </div>
+                <div class="form-group col-lg-12">
+                    <label for="txtDescripcion">Descripcion: </label>
+                    <textarea type="text"name="txtDescripcion" id="txtDescripcion" class="form-control"></textarea>
+                </div>
+               
 </div>
 </form>
+<script>
 
+    $("#form1").validate();
+
+    function guardar() {
+        if ($("#form1").valid()) {
+            modificado = false;
+            form1.submit();
+        } else {
+            $("#modalGuardar").modal('toggle');
+            msgShow("Corrija los errores e intente nuevamente.", "danger");
+            return false;
+        }
+    }
+
+    function eliminar() {
+        $.ajax({
+            type: "GET",
+            url: "{{ asset('admin/producto/eliminar') }}",
+            data: { id:globalId },
+            async: true,
+            dataType: "json",
+            success: function (data) {
+                if (data.err = "0") {
+                    msgShow("Registro eliminado exitosamente.", "success");
+                    $("#btnEnviar").hide();
+                    $("#btnEliminar").hide();
+                    $('#mdlEliminar').modal('toggle');
+                } else {
+                    msgShow("Error al eliminar", "success");
+                }
+            }
+        });
+    }
+
+</script>
 @endsection

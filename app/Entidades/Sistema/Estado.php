@@ -5,8 +5,8 @@ namespace App\Entidades;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 
-class Cliente extends Model{
-      protected $table ='estado';
+class Estado extends Model{
+      protected $table ='estados';
       public $timestamps = false;
 
       protected $fillable = [
@@ -17,11 +17,17 @@ class Cliente extends Model{
       protected $hidden = [
 
       ];
+      public function cargarDesdeRequest($request)
+    {
+        $this->idestado = $request->input('id') != "0" ? $request->input('id') : $this->idestado;
+        $this->nombre = $request->input('txtNombre'); //input de entrada
+     
+    }
 
       public function insertar ()
 {
       $sql = "INSERT INTO $this->table (
-          'nombre'
+          nombre
             ) VALUES (?);";
 
             $result = DB:: insert ($sql,
@@ -50,7 +56,7 @@ public function guardar() {
         $sql = "SELECT
                 idestado,
                 nombre
-                FROM $this->table WHERE idestado = $idestado";
+                FROM estados WHERE idestado = $idestado";
         $lstRetorno = DB::select($sql);
 
         if (count($lstRetorno) > 0) {
@@ -67,7 +73,7 @@ public function guardar() {
         $sql = "SELECT
                   A.idestado,
                   A.nombre
-                FROM $this->table ORDER BY idestado";
+                FROM estados A ORDER BY A.nombre";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
     }

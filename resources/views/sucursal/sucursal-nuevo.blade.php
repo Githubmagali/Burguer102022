@@ -10,7 +10,7 @@
 @section('breadcrumb')
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin/home">Inicio</a></li>
-    <li class="breadcrumb-item"><a href="/admin/sucursal">Sucursales</a></li>
+    <li class="breadcrumb-item"><a href="/admin/sucursales">Sucursales</a></li>
     <li class="breadcrumb-item active">Modificar</li>
 </ol>
 <ol class="toolbar">
@@ -59,11 +59,47 @@ if (isset($msg)){
                 <label>Direccion: *</label>
                     <input type="text" id="txtDireccion" name="txtDireccion" class="form-control" value="" required>
                 </div>
-                <diinputv class="form-group col-lg-12">
+                <div class="form-group col-lg-12">
                 <label>Mapa: *</label>
-                    < type="text" id="txtMapa" name="txtMapa" class="form-control" value="" required>
+                    <label type="text" id="txtMapa" name="txtMapa" class="form-control" value="" required>
                 </div>
 </div>
 </form>
+<script>
+
+    $("#form1").validate();
+
+    function guardar() {
+        if ($("#form1").valid()) {
+            modificado = false;
+            form1.submit();
+        } else {
+            $("#modalGuardar").modal('toggle');
+            msgShow("Corrija los errores e intente nuevamente.", "danger");
+            return false;
+        }
+    }
+
+    function eliminar() {
+        $.ajax({
+            type: "GET",
+            url: "{{ asset('admin/sucursal/eliminar') }}",
+            data: { id:globalId },
+            async: true,
+            dataType: "json",
+            success: function (data) {
+                if (data.err = "0") {
+                    msgShow("Registro eliminado exitosamente.", "success");
+                    $("#btnEnviar").hide();
+                    $("#btnEliminar").hide();
+                    $('#mdlEliminar').modal('toggle');
+                } else {
+                    msgShow("Error al eliminar", "success");
+                }
+            }
+        });
+    }
+
+</script>
 
 @endsection

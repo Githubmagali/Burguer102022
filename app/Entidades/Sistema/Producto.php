@@ -6,67 +6,95 @@ namespace App\Entidades;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 
-class Productos extends Model{
-      protected $table ='producto';
-      public $timestamps = false;
-
-      protected $fillable = [
-            'idproducto',
-            'nombre',
-            'cantidad',
-            'precio',
-            'imagen',
-            'fk_idcategoria',
-            'descripcion'
-      ];
-
-      protected $hidden = [
-
-      ];
-
-      public function insertar ()
+class Producto extends Model
 {
-      $sql = "INSERT INTO $this->table (
-          'nombre',
-          'cantidad',
-          'precio',
-          'imagen',
-          'fk_idcategoria',
-          'descripcion'
-            ) VALUES (?,?,?,?,?,?);";
+    protected $table = 'productos';
+    public $timestamps = false;
 
-            $result = DB:: insert ($sql,
+    protected $fillable = [
+        'idproducto',
+        'nombre',
+        'cantidad',
+        'precio',
+        'imagen',
+        'fk_idcategoria',
+        'descripcion'
+    ];
+
+    protected $hidden = [
+
+    ];
+    public function cargarDesdeRequest($request)
+    {
+        $this->idproducto = $request->input('id') != "0" ? $request->input('id') : $this->idproducto;
+        $this->nombre = $request->input('txtNombre');
+        $this->cantidad = $request->input('txtCantidad');
+        $this->precio = $request->input('txtPrecio');
+        $this->imagen = $request->input('txtImagen');
+        $this->fk_idcategoria = $request->input('lstCategoria');
+        $this->descripcion = $request->input('txtDescripcion');
+    }
+
+    public function insertar()
+    {
+        $sql = "INSERT INTO $this->table (
+          nombre,
+          cantidad,
+          precio,
+          imagen,
+          fk_idcategoria,
+          descripcion
+            ) VALUES (?, ?, ?,?,?,?);";
+
+        $result = DB::insert(
+            $sql,
             [
-                  $this->nombre,
-                  $this->cantidad,
-                  $this->precio,
-                  $this->imagen,
-                  $this->fk_idcategoria,
-                  $this->descripcion
-            ]);
-            return $this->idproducto= DB:: getPdo()->lastInstertId();
-}
-public function guardar() {
-      $sql = "UPDATE productos SET
+                $this->nombre,
+                $this->cantidad,
+                $this->precio,
+                $this->imagen,
+                $this->fk_idcategoria,
+                $this->descripcion
+            ]
+        );
+        return $this->idproducto = DB::getPdo()->lastInstertId();
+    }
+    public function guardar()
+    {
+        $sql = "UPDATE $this->table SET
           nombre='$this->nombre',
           cantidad='$this->cantidad',
           precio='$this->precio',
           imagen='$this->imagen',
-          fk_idcategoria=$this->fk_idcategoria,
+          fk_idcategoria='$this->fk_idcategoria',
           descripcion='$this->descripcion'
           
           WHERE idproducto=?";
-      $affected = DB::update($sql, [$this->idproducto]);
-  }
-  public function eliminar()
-  {
-      $sql = "DELETE FROM productos WHERE idproducto=?";
+        $affected = DB::update($sql, [$this->idproducto]);
+    }
+    public function eliminar()
+    {
+        $sql = "DELETE FROM $this->table WHERE idproducto=?";
 
+        $affected = DB::delete($sql, [$this->idproducto]);
+    }
 
-      $affected = DB::delete($sql, [$this->idproducto]);
-  }
+    public function obtenerTodos()
+    {
+        $sql = "SELECT
+                A.idproducto,
+                A.nombre,
+                A.cantidad,
+                A.precio,
+                A.imagen,
+                A.fk_idcategoria,
+                A.descripcion
+              FROM $this->table A ORDER BY idproducto";
+        $lstRetorno = DB::select($sql);
+        return $lstRetorno;
+    }
 
-  public function obtenerPorId($idproducto)
+    public function obtenerPorId($idproducto)
     {
         $sql = "SELECT
                 idproducto,
@@ -87,24 +115,9 @@ public function guardar() {
             $this->imagen = $lstRetorno[0]->imagen;
             $this->fk_idcategoria = $lstRetorno[0]->fk_idcategoria;
             $this->descripcion = $lstRetorno[0]->descripcion;
-            
+
             return $this;
         }
         return null;
-    }
-
-    public function obtenerTodos()
-    {
-        $sql = "SELECT
-                  A.idproducto,
-                  A.nombre,
-                  A.cantidad,
-                  A.precio,
-                  A.imagen,
-                  A.fk_idcategoria,
-                  A. descripcion
-                FROM productos A ORDER BY A.nombre";
-        $lstRetorno = DB::select($sql);
-        return $lstRetorno;
     }
 }

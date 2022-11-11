@@ -11,8 +11,8 @@ class Pedido extends Model{
 
       protected $fillable = [
             'idpedido',
-            'descripcion',
             'fecha',
+            'descripcion',
             'total',
             'fk_idsucursal',
             'fk_idcliente',
@@ -22,13 +22,24 @@ class Pedido extends Model{
       protected $hidden = [
 
       ];
+      public function cargarDesdeRequest($request)
+      {
+          $this->idpedido = $request->input('id') != "0" ? $request->input('id') : $this->idpedido;
+         $this->fecha = $request->input('txtFecha');
+          $this->descripcion = $request->input('txtDescripcion');
+          $this->total= $request->input('txtTotal');
+          $this->fk_idsucursal= $request->input('lstSucursal');
+          $this->fk_idcliente= $request->input('lstCliente');
+          $this->fk_idestado= $request->input('lstEstado');
+          
+      }
 
       public function insertar ()
 {
       $sql = "INSERT INTO $this->table (
-        'descripcion',
-        'fecha',
-        'total',
+        fecha,
+        descripcion,
+        total,
         fk_idsucursal,
         fk_idcliente,
         fk_idestado
@@ -36,8 +47,8 @@ class Pedido extends Model{
 
             $result = DB:: insert ($sql,
             [
-                  $this->descripcion,
                   $this->fecha,
+                  $this->descripcion,
                   $this->total,
                   $this->fk_idsucursal,
                   $this->fk_idcliente,
@@ -47,8 +58,8 @@ class Pedido extends Model{
 }
 public function guardar() {
       $sql = "UPDATE pedidos SET
+        fecha='$this->fecha',
          descripcion='$this->descripcion',
-         fecha='$this->fecha',
          total='$this->total',
          fk_idsucursal=$this->fk_idsucursal,
          fk_idcliente=$this->fk_idcliente,
@@ -81,8 +92,8 @@ public function guardar() {
   
         if (count($lstRetorno) > 0) {
             $this->idpedido = $lstRetorno[0]->idpedido;
-            $this->descripcion= $lstRetorno[0]->descripcion;
             $this->fecha = $lstRetorno[0]->fecha;
+            $this->descripcion= $lstRetorno[0]->descripcion;
             $this->total = $lstRetorno[0]->total;
             $this->fk_idsucursal= $lstRetorno[0]->fk_idsucursal;
             $this->fk_idcliente= $lstRetorno[0]->fk_idcliente;
@@ -98,13 +109,13 @@ public function guardar() {
     {
         $sql = "SELECT
                   A.idpedido,
-                  A.descripcion,
                   A.fecha,
+                  A.descripcion,
                   A.total,
                   A.fk_idsucursal,
                   A.fk_idcliente,
                   A.fk_idestado
-                FROM pedidos ORDER BY idpedido";
+                FROM pedidos A ORDER BY A.descripcion";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
     }

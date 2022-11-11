@@ -47,18 +47,25 @@ if (isset($msg)){
             <div class="row">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
                 <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
-                <div class="form-group col-lg-12">
-                <label>Descripcion: *</label>
-                    <textarea type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="" required></textarea>
-                </div>
+                
                     <div class="form-group col-lg-12">
                     <label>Fecha: *</label>
                     <input type="date" id="txtFecha" name="txtFecha" class="form-control" value="" required>
                 </div>
+                <div class="form-group col-lg-12">
+                <label>Descripcion: *</label>
+                    <textarea type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="" required></textarea>
+                </div>
                 
                 <div class="form-group col-lg-12">
                 <label>Sucursal: *</label>
-                    <select type="lst" id="lstEstado" name="lstEstado" class="form-control" value="" required></select>
+                    <select id="lstSucursal" name="lstSucursal" class="form-control" value="" required>
+               <option disabled selected>Seleccionar</option>
+                
+               @foreach($aSucursales as $item)
+                <option id="{{ $item->idsucursal}}">{{ $item->nombre}}</option>
+                @endforeach
+                </select>
                 </div>
                 <div class="form-group col-lg-12">
                 <label>Cliente: *</label>
@@ -74,5 +81,41 @@ if (isset($msg)){
                
 </div>
 </form>
+<script>
+
+    $("#form1").validate();
+
+    function guardar() {
+        if ($("#form1").valid()) {
+            modificado = false;
+            form1.submit();
+        } else {
+            $("#modalGuardar").modal('toggle');
+            msgShow("Corrija los errores e intente nuevamente.", "danger");
+            return false;
+        }
+    }
+
+    function eliminar() {
+        $.ajax({
+            type: "GET",
+            url: "{{ asset('admin/pedido/eliminar') }}",
+            data: { id:globalId },
+            async: true,
+            dataType: "json",
+            success: function (data) {
+                if (data.err = "0") {
+                    msgShow("Registro eliminado exitosamente.", "success");
+                    $("#btnEnviar").hide();
+                    $("#btnEliminar").hide();
+                    $('#mdlEliminar').modal('toggle');
+                } else {
+                    msgShow("Error al eliminar", "success");
+                }
+            }
+        });
+    }
+
+</script>
 
 @endsection

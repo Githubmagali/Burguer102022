@@ -9,7 +9,7 @@
 <?php //asset sig que lo va a ir a buscar a la carpeta public donde en css tenemos el datatable ?>
 @section('breadcrumb')
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
+    <li class="breadcrumb-item"><a href="/admin">Inicio</a></li>
     <li class="breadcrumb-item active">Cliente</a></li>
 </ol>
 <ol class="toolbar">
@@ -35,9 +35,15 @@ if (isset($msg)) {
     </thead>
 </table> 
 <script>
-	 $('document'). ready( function (){
-	   $('#grilla'). DataTable();
+	var dataTable = $('#grilla').DataTable({
+	    "processing": true,
+        "serverSide": true,
+	    "bFilter": true,
+	    "bInfo": true,
+	    "bSearchable": true,
+        "pageLength": 25,
+        "order": [[ 0, "asc" ]],
+	    "ajax": "{{ route('producto.cargarGrilla') }}"
 	});
-      <?php //busca por id numeral grilla y lo convierte en un datatable ?>
 </script>
 @endsection

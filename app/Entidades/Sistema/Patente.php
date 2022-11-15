@@ -10,7 +10,7 @@ require app_path() . '/start/constants.php';
 
 class Patente extends Model
 {
-    protected $table = 'sistema_patentes';
+    protected $table = 'sistema_patente';
     public $timestamps = false;
 
     protected $fillable = [

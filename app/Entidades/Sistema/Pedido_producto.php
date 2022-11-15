@@ -6,7 +6,7 @@ use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Pedido_producto extends Model{
-      protected $table ='pedido_productos';
+      protected $table ='pedido_producto';
       public $timestamps = false;
 
       protected $fillable = [

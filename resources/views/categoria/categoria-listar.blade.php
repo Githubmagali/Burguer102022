@@ -8,7 +8,7 @@
 @endsection
 @section('breadcrumb')
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
+    <li class="breadcrumb-item"><a href="/admin">Inicio</a></li>
     <li class="breadcrumb-item active">Categoria</a></li>
 </ol>
 <ol class="toolbar">
@@ -34,8 +34,15 @@ if (isset($msg)) {
     </thead>
 </table> 
 <script>
-	 $('document'). ready( function (){
-	   $('#grilla'). DataTable();
+	var dataTable = $('#grilla').DataTable({
+	    "processing": true,
+        "serverSide": true,
+	    "bFilter": true,
+	    "bInfo": true,
+	    "bSearchable": true,
+        "pageLength": 25,
+        "order": [[ 0, "asc" ]],
+	    "ajax": "{{ route('categoria.cargarGrilla') }}"
 	});
 </script>
 @endsection

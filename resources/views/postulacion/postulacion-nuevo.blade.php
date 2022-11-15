@@ -43,7 +43,7 @@ if (isset($msg)){
         echo '<script>msgShow("' . $msg["MSG"] . '""' . $msg["ESTADO"] .'")</script>';
     }
     ?>
-<form id="form1" method="POST">
+<form id="form1" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
                 <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
@@ -58,6 +58,10 @@ if (isset($msg)){
                 <div class="form-group col-lg-12">
                 <label>Celular: *</label>
                     <input type="text" id="txtCelular" name="txtCelular" class="form-control" value="" required>
+                </div>
+                <div class="form-group col-lg-12">
+                    <label>CV:</label>
+                    <input type="file" id="" name="archivo">
                 </div>
 </div>
 </form>

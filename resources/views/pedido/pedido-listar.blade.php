@@ -35,9 +35,15 @@ if (isset($msg)) {
     </thead>
 </table> 
 <script>
-	 $('document'). ready( function (){
-	   $('#grilla'). DataTable();
+	var dataTable = $('#grilla').DataTable({
+	    "processing": true,
+        "serverSide": true,
+	    "bFilter": true,
+	    "bInfo": true,
+	    "bSearchable": true,
+        "pageLength": 25,
+        "order": [[ 0, "asc" ]],
+	    "ajax": "{{ route('pedido.cargarGrilla') }}"
 	});
-      <?php //busca por id numeral grilla y lo convierte en un datatable ?>
 </script>
 @endsection

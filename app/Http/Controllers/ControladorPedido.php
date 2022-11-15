@@ -20,7 +20,6 @@ class ControladorPedido extends Controller
 
         $sucursal = new Sucursal();
         $aSucursales = $sucursal->obtenerTodos();
-        
 
         $cliente = new Cliente();
         $aClientes = $cliente->obtenerTodos();
@@ -28,7 +27,7 @@ class ControladorPedido extends Controller
         $estado = new Estado();
         $aEstados = $estado->obtenerTodos();
 
-        return view ('pedido.pedido-nuevo', compact('titulo','aSucursales', 'aClientes', 'aEstados')); //en la carpeta resurses->views tenemos lass vistas
+        return view ('pedido.pedido-nuevo', compact('titulo','aSucursales','aClientes', 'aEstados')); //en la carpeta resurses->views tenemos lass vistas
        
     }
     public function index()

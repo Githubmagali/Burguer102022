@@ -13,20 +13,28 @@ require app_path() . '/start/constants.php';
 class ControladorEstado extends Controller
 {
     public function nuevo()
-    {
-        $titulo = "Nuevo estado";
-        $estado = new Estado();
+    {   
+        $titulo = "Nuevo Estado";
 
-     
-        return view ('estado.estado-nuevo', compact('titulo', 'estado')); //en la carpeta resurses->views tenemos lass vistas
-       
+        if (Usuario::autenticado() == true) { //validación
+            if (!Patente::autorizarOperacion("ESTADOCONSULTA")) { //otra validación
+                $codigo = "ESTADOCONSULTA";
+                $mensaje = "No tiene permisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+                $estado = New Estado();
+               return view( 'estado.estado-nuevo', compact ('titulo','estado') );
+            }
+        } else {
+            return redirect('admin/login');
+        }
     }
     public function index()
     {
         $titulo = "Listado de estados";
         if (Usuario::autenticado() == true) {
-            if (!Patente::autorizarOperacion("MENUCONSULTA")) {
-                $codigo = "MENUCONSULTA";
+            if (!Patente::autorizarOperacion("ESTADOCONSULTA")) {
+                $codigo = "ESTADOCONSULTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
@@ -73,6 +81,14 @@ class ControladorEstado extends Controller
             $entidad = new Estado();
             $entidad->cargarDesdeRequest($request); //agarra el request del formulario y lo carga al propio objeto
 
+            if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) { //Se adjunta imagen
+                $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
+                 $nombre = date("Ymdhmsi") . ".$extension";
+                 $archivo = $_FILES["archivo"]["tmp_name"];
+                 move_uploaded_file($archivo, env('APP_PATH') . "/public/files/$nombre"); //guardaelarchivo
+                 $entidad->imagen = $nombre;
+             }
+            
             //validaciones
             if ($entidad->nombre == "") {
                 $msg["ESTADO"] = MSG_ERROR;
@@ -80,6 +96,17 @@ class ControladorEstado extends Controller
             } else {
                 if ($_POST["id"] > 0) {
                     //Es actualizacion
+
+                    $productAnt = new Estado();
+                    $productAnt->obtenerPorId($entidad->idestado);
+
+                    if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK){
+                        //Eliminar imagen anterior
+                        unlink("../public/files/$productAnt->imagen");                           
+                    } else {
+                        $entidad->imagen = $productAnt->imagen;
+                    }
+
                     $entidad->guardar();
 
                     $msg["ESTADO"] = MSG_SUCCESS;// msg_SUCCESS esta almacenado en app->providers->star->constants.php 
@@ -109,18 +136,15 @@ class ControladorEstado extends Controller
     {
         $titulo = "Modificar cliente";
         if (Usuario::autenticado() == true) {
-            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
-                $codigo = "MENUMODIFICACION";
+            if (!Patente::autorizarOperacion("ESTADOEDITAR")) {
+                $codigo = "ESTADOEDITAR";
                 $mensaje = "No tiene pemisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
                
-                
-
-                $estado = new Estado();
+             $estado = new Estado();
                 $estado->obtenerPorId($id);
-
-                return view('estado.estado-nuevo', compact('menu', 'titulo'));
+                return view('estado.estado-nuevo', compact('estado', 'titulo'));
             }
         } else {
             return redirect('admin/login');
@@ -128,4 +152,28 @@ class ControladorEstado extends Controller
     
 
 }
+public function eliminar(Request $request)
+    {
+        $id = $request->input('id');
+
+        if (Usuario::autenticado() == true) {
+            if (Patente::autorizarOperacion("ESTADOBAJA")) {
+
+              
+                $entidad = new Estado();
+                $entidad->cargarDesdeRequest($request);
+                              
+                $entidad->eliminar();
+
+                $aResultado["err"] = EXIT_SUCCESS; //eliminado correctamente
+            } else {
+                $codigo = "ESTADOBAJA";
+                $aResultado["err"] = "No tiene pemisos para la operaci&oacute;n.";
+            }
+            echo json_encode($aResultado);
+        } else {
+            return redirect('admin/login');
+        }
+    }
+
 }

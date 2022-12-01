@@ -43,21 +43,21 @@ if (isset($msg)){
         echo '<script>msgShow("' . $msg["MSG"] . '""' . $msg["ESTADO"] .'")</script>';
     }
     ?>
-<form id="form1" method="POST">
+<form id="form1" method="POST" enctype="multipart/form-data">
             <div class="row">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
                 <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                 <div class="form-group col-lg-12">
                 <label>Nombre: *</label>
-                    <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="" required>
+                    <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$cliente->nombre}}" required>
                 </div>
                     <div class="form-group col-lg-12">
                     <label>Apellido: *</label>
-                    <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="" required>
+                    <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="{{$cliente->apellido}}" required>
                 </div>
                 <div class="form-group col-lg-12">
                 <label>Correo: *</label>
-                    <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="" required>
+                    <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="{{$cliente->correo}}" required>
                 </div>
 </div>
 </form>
@@ -94,17 +94,17 @@ if (isset($msg)){
         }
     }
 
-    function eliminar() {
+    function eliminar() { //funcion de javascript
         $.ajax({
             type: "GET",
-            url: "{{ asset('admin/cliente/eliminar') }}",
-            data: { id:globalId },
-            async: true,
-            dataType: "json",
-            success: function (data) {
-                if (data.err = "0") {
+            url: "{{ asset('admin/cliente/eliminar') }}", //hace una peticion al servidor via GET
+            data: { id:globalId }, //EN USUARIO ENVIA 'admin/cliente/eliminar' y envia 'data' via 'GET', AL ENVIARLA VIA get VIAJA POR QUERY STRIM
+            async: true, //es de forma sincronica porque si hago click en eliminar me permite que mientras trabaja en la secuencia de eliminar me permite seguir trabaajando
+            dataType: "json", //los datos viajan en json que se comunica bajo difrentes tecnologias en este caso frnt con php
+            success: function (data) { //success indica que va  hacer el servidor
+                if (data.err = "0") { //si data.err es 0 = 'registro eliminado correctamente'
                     msgShow("Registro eliminado exitosamente.", "success");
-                    $("#btnEnviar").hide();
+                    $("#btnEnviar").hide(); //hide oculta botones
                     $("#btnEliminar").hide();
                     $('#mdlEliminar').modal('toggle');
                 } else {

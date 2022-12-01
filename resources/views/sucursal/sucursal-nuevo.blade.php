@@ -43,25 +43,25 @@ if (isset($msg)){
         echo '<script>msgShow("' . $msg["MSG"] . '""' . $msg["ESTADO"] .'")</script>';
     }
     ?>
-<form id="form1" method="POST">
+<form id="form1" method="POST"enctype="multipart/form-data">
             <div class="row">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
                 <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                 <div class="form-group col-lg-12">
                 <label>Nombre: *</label>
-                    <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="" required>
+                    <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$sucursal->nombre}}" required>
                 </div>
                     <div class="form-group col-lg-12">
                     <label>Telefono: *</label>
-                    <input type="text" id="txtTelefono" name="txtTelefono" class="form-control" value="" required>
+                    <input type="text" id="txtTelefono" name="txtTelefono" class="form-control" value="{{$sucursal->telefono}}" required>
                 </div>
                 <div class="form-group col-lg-12">
                 <label>Direccion: *</label>
-                    <input type="text" id="txtDireccion" name="txtDireccion" class="form-control" value="" required>
+                    <input type="text" id="txtDireccion" name="txtDireccion" class="form-control" value="{{$sucursal->direccion}}" required>
                 </div>
                 <div class="form-group col-lg-12">
                 <label>Mapa: *</label>
-                    <label type="text" id="txtMapa" name="txtMapa" class="form-control" value="" required>
+                    <label type="text" id="txtMapa" name="txtMapa" class="form-control" value="{{$sucursal->mapa}}" required>
                 </div>
 </div>
 </form>

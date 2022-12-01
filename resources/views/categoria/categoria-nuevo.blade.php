@@ -43,13 +43,13 @@ if (isset($msg)){
         echo '<script>msgShow("' . $msg["MSG"] . '""' . $msg["ESTADO"] .'")</script>';
     }
     ?>
-<form id="form1" method="POST">
+<form id="form1" method="POST"enctype="multipart/form-data">
             <div class="row">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
                 <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                 <div class="form-group col-lg-12">
                 <label>Categoria: *</label>
-                    <select type="lst" id="lstCategoria" name="lstCategoria" class="form-control" value="" required></select>
+                    <select type="lst" id="lstCategoria" name="lstCategoria" class="form-control" value="{{$categoria->categoria}}" required></select>
                 </div>
                    
                </div>

@@ -12,19 +12,29 @@ require app_path() . '/start/constants.php';
 class ControladorCliente extends Controller
 {
     public function nuevo()
-    {
+    {   
+        
         $titulo = "Nuevo Cliente";
-        $cliente =new Cliente();
-
-        return view ('cliente.cliente-nuevo', compact('titulo', 'cliente')); //en la carpeta resurses->views tenemos lass vistas
-       
+        if (Usuario::autenticado() == true) { //validación
+            if (!Patente::autorizarOperacion("CLIENTECONSULTA")) { //otra validación
+                $codigo = "CLIENTECONSULTA";
+                $mensaje = "No tiene permisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+                
+                $cliente = New Cliente();
+               return view( 'cliente.cliente-nuevo', compact ('titulo','cliente') );
+            }
+        } else {
+            return redirect('admin/login');
+        }
     }
     public function index() //carga la pantlla
     {
         $titulo = "Listado de cliente";
         if (Usuario::autenticado() == true) {
-            if (!Patente::autorizarOperacion("MENUCONSULTA")) { //consulta si tiene el permiso
-                $codigo = "MENUCONSULTA";
+            if (!Patente::autorizarOperacion("CLIENTECONSULTA")) { //consulta si tiene el permiso
+                $codigo = "CLIENTECONSULTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
@@ -74,10 +84,18 @@ class ControladorCliente extends Controller
     public function guardar(Request $request) {
         try {
             //Define la entidad servicio
-            $titulo = "Modificar cliente";
+            $titulo = "Modificar Cliente";
             $entidad = new  Cliente();
             $entidad->cargarDesdeRequest($request); //agarra el request del formulario y lo carga al propio objeto
 
+
+            if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) { //Se adjunta imagen
+                $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
+                 $nombre = date("Ymdhmsi") . ".$extension";
+                 $archivo = $_FILES["archivo"]["tmp_name"];
+                 move_uploaded_file($archivo, env('APP_PATH') . "/public/files/$nombre"); //guardaelarchivo
+                 $entidad->imagen = $nombre;
+             }
             //validaciones
             if ($entidad->nombre == "") {
                 $msg["ESTADO"] = MSG_ERROR;
@@ -85,6 +103,17 @@ class ControladorCliente extends Controller
             } else {
                 if ($_POST["id"] > 0) {
                     //Es actualizacion
+                    $productAnt = new Cliente();
+                    $productAnt->obtenerPorId($entidad->idcliente);
+
+
+                    if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK){
+                        //Eliminar imagen anterior
+                        @unlink(env('APP_PATH') . "/public/files/$productAnt->imagen");                            
+                    } else {
+                        $entidad->imagen = $productAnt->imagen;
+                    }
+
                     $entidad->guardar();
 
                     $msg["ESTADO"] = MSG_SUCCESS;// msg_SUCCESS esta almacenado en app->providers->star->constants.php 
@@ -114,8 +143,8 @@ class ControladorCliente extends Controller
     {
         $titulo = "Modificar cliente";
         if (Usuario::autenticado() == true) {
-            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
-                $codigo = "MENUMODIFICACION";
+            if (!Patente::autorizarOperacion("CLIENTEEDITAR")) {
+                $codigo = "CLIENTEEDITAR";
                 $mensaje = "No tiene pemisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
@@ -131,5 +160,31 @@ class ControladorCliente extends Controller
             return redirect('admin/login');
         }
     }
+
+    public function eliminar(Request $request)
+    {
+        $id = $request->input('id');
+
+        if (Usuario::autenticado() == true) {
+            if (Patente::autorizarOperacion("CLIENTEELIMINAR")) {
+
+              
+                $entidad = new Cliente();
+                $entidad->cargarDesdeRequest($request);
+                $entidad->eliminar();
+               
+                $entidad->eliminar();
+
+                $aResultado["err"] = EXIT_SUCCESS; //eliminado correctamente
+            } else {
+                $codigo = "CLIENTEELIMINAR";
+                $aResultado["err"] = "No tiene pemisos para la operaci&oacute;n.";
+            }
+            echo json_encode($aResultado);
+        } else {
+            return redirect('admin/login');
+        }
+    }
+
 
 }

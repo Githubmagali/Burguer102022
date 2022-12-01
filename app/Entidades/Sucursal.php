@@ -6,7 +6,7 @@ use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Sucursal extends Model{
-      protected $table ='sucursal';
+      protected $table ='sucursales';
       public $timestamps = false;
 
       protected $fillable = [
@@ -30,7 +30,7 @@ class Sucursal extends Model{
           
       }
       public function guardar() {
-        $sql = "UPDATE $this->table SET
+        $sql = "UPDATE sucursales SET
            nombre='$this->nombre',
            telefono='$this->telefono',
            direccion=$this->direccion,
@@ -43,7 +43,7 @@ class Sucursal extends Model{
 
       public function insertar ()
 {
-      $sql = "INSERT INTO $this->table (
+      $sql = "INSERT INTO sucursales (
             nombre,
          telefono,
          direccion,
@@ -62,7 +62,7 @@ class Sucursal extends Model{
 
   public function eliminar()
   {
-      $sql = "DELETE FROM $this->table  WHERE idsucursal=?";
+      $sql = "DELETE FROM sucursales  WHERE idsucursal=?";
 
 
       $affected = DB::delete($sql, [$this->idsucursal]);
@@ -77,7 +77,7 @@ class Sucursal extends Model{
                   A.telefono,
                   A.direccion,
                   A.linkmapa
-                FROM $this->table A ORDER BY A.nombre ";
+                FROM sucursales A ORDER BY A.nombre ";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
     }
@@ -91,7 +91,7 @@ class Sucursal extends Model{
                 direccion,
                 linkmapa
 
-                FROM $this->table WHERE idsucursal = $idsucursal";
+                FROM sucursales WHERE idsucursal = $idsucursal";
         $lstRetorno = DB::select($sql);
   
         if (count($lstRetorno) > 0) {

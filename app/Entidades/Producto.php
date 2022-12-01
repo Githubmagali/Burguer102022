@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Producto extends Model
 {
+    
     protected $table = 'productos';
     public $timestamps = false;
 
@@ -37,7 +38,7 @@ class Producto extends Model
 
     public function insertar()
     {
-        $sql = "INSERT INTO $this->table (
+        $sql = "INSERT INTO productos (
           nombre,
           cantidad,
           precio,
@@ -73,7 +74,7 @@ class Producto extends Model
                 imagen,
                 fk_idcategoria,
                 descripcion
-                FROM $this->table WHERE idproducto = $idproducto";
+                FROM productos WHERE idproducto = $idproducto";
         $lstRetorno = DB::select($sql);
 
         if (count($lstRetorno) > 0) {
@@ -99,15 +100,15 @@ class Producto extends Model
                 A.imagen,
                 A.fk_idcategoria,
                 A.descripcion
-              FROM $this->table A ORDER BY A.nombre";
+              FROM productos A ORDER BY idproducto ASC";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
     }
     public function guardar()
     {
         $sql = "UPDATE productos SET
-          nombre='$this->nombre',
-          cantidad='$this->cantidad',
+          nombre=$this->nombre,
+          cantidad=$this->cantidad,
           precio='$this->precio',
           imagen='$this->imagen',
           fk_idcategoria=$this->fk_idcategoria,
@@ -118,7 +119,7 @@ class Producto extends Model
     }
     public function eliminar()
     {
-        $sql = "DELETE FROM $this->table WHERE idproducto=?";
+        $sql = "DELETE FROM productos WHERE idproducto=?";
 
         $affected = DB::delete($sql, [$this->idproducto]);
     }

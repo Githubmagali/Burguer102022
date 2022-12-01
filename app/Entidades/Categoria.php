@@ -5,7 +5,7 @@ namespace App\Entidades;
 use DB;
 use Illuminate\Database\Eloquent\Model;
 
-class Categoria extends Model{
+  class Categoria extends Model{
       protected $table ='categorias';
       public $timestamps = false;
 

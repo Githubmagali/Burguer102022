@@ -49,19 +49,19 @@ if (isset($msg)){
                 <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                 <div class="form-group col-lg-12">
                 <label>Nombre: *</label>
-                    <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="" required>
+                    <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$postulacion->nombre}}" required>
                 </div>
                     <div class="form-group col-lg-12">
                     <label>Apellido: *</label>
-                    <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="" required>
+                    <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="{{$postulacion->apellido}}" required>
                 </div>
                 <div class="form-group col-lg-12">
                 <label>Celular: *</label>
-                    <input type="text" id="txtCelular" name="txtCelular" class="form-control" value="" required>
+                    <input type="text" id="txtCelular" name="txtCelular" class="form-control" value="{{$postulacion->celular}}" required>
                 </div>
                 <div class="form-group col-lg-12">
                     <label>CV:</label>
-                    <input type="file" id="" name="archivo">
+                    <input type="file" id="" name="archivo"value="{{$postulacion->curriculum}}">
                 </div>
 </div>
 </form>

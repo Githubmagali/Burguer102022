@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Entidades\Producto; //include_once "app/Entidades/Sistema/Menu.php";
+
+use App\Entidades\Producto; 
+use App\Entidades\Categoria; 
 use App\Entidades\Sistema\Patente;
 use App\Entidades\Sistema\Usuario;
-use App\Entidades\Categoria;
 use Illuminate\Http\Request;
 
 require app_path() . '/start/constants.php';
@@ -13,21 +14,31 @@ require app_path() . '/start/constants.php';
 class ControladorProducto extends Controller
 {
     public function nuevo()
-    {
-        $titulo = "Nuevo producto";
+    {   
+        $titulo = "Nuevo Producto";
 
-    $producto = new Producto();
-    
-
-        return view ('producto.producto-nuevo', compact('titulo', 'producto')); //en la carpeta resurses->views tenemos lass vistas
-       
+        if (Usuario::autenticado() == true) { //validación
+            if (!Patente::autorizarOperacion("PRODUCTOCONSULTA")) { //otra validación
+                $codigo = "PRODUCTOCONSULTA";
+                $mensaje = "No tiene permisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+                $producto = New Producto();
+                $categoria = new Categoria();
+                $aCategorias = $categoria->obtenerTodos();
+                return view( 'producto.producto-nuevo', compact ('titulo','producto', 'aCategorias') );
+            }
+        } else {
+            return redirect('admin/login');
+        }
     }
+
     public function index()
     {
-        $titulo = "Listado de producto";
-        if (Usuario::autenticado() == true) {
-            if (!Patente::autorizarOperacion("MENUCONSULTA")) {
-                $codigo = "MENUCONSULTA";
+        $titulo = "Listado de Productos";
+        if (Usuario::autenticado() == true) { //validación
+            if (!Patente::autorizarOperacion("PRODUCTOCONSULTA")) { //otra validación
+                $codigo = "PRODUCTOCONSULTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
@@ -37,47 +48,58 @@ class ControladorProducto extends Controller
             return redirect('admin/login');
         }
     }
+
     public function cargarGrilla()
     {
         $request = $_REQUEST;
 
         $entidad = new Producto();
-        $aProducto = $entidad->obtenerFiltrado();
+        $aProductos = $entidad->obtenerFiltrado();
 
-        $data = array();
+        $data = array(); #variables de configuración 
         $cont = 0;
 
         $inicio = $request['start'];
         $registros_por_pagina = $request['length'];
 
 
-        for ($i = $inicio; $i < count($aProducto) && $cont < $registros_por_pagina; $i++) {
+        for ($i = $inicio; $i < count($aProductos) && $cont < $registros_por_pagina; $i++) {
             $row = array();
-            $row[] = $aProducto[$i]->nombre;
-            $row[] = $aProducto[$i]->cantidad;
-            $row[] ="$". number_format($aProducto[$i]->precio, 2, ",",".");
-            $row[] = $aProducto[$i]->imagen;
-            $row[] = $aProducto[$i]->fk_idcategoria;
-            $row[] = $aProducto[$i]->descripcion;
-         
+            $row[] = "<a href='/admin/producto/" .$aProductos[$i]->idproducto. "' class='btn btn-secondary'><i class='fa-solid fa-pencil'></i></a>";
+            $row[] = $aProductos[$i]->nombre;
+            $row[] = $aProductos[$i]->cantidad;
+            $row[] = "$". number_format ($aProductos[$i]->precio, 2, ",", "."); 
+            $row[] = "<img src='/files/" .$aProductos[$i]->imagen. "' class='img-thumbnail'>";
+            $row[] = $aProductos[$i]->categoria;
+            $row[] = $aProductos[$i]->descripcion;
             $cont++;
             $data[] = $row;
         }
-// formauna fila, lo adjunta en el array de data y json adjunta los datos del array conviertiendose en un json
+
         $json_data = array(
             "draw" => intval($request['draw']),
-            "recordsTotal" => count($aProducto), //cantidad total de registros sin paginar
-            "recordsFiltered" => count($aProducto), //cantidad total de registros en la paginacion
+            "recordsTotal" => count($aProductos), //cantidad total de registros sin paginar
+            "recordsFiltered" => count($aProductos), //cantidad total de registros en la paginacion
             "data" => $data,
         );
         return json_encode($json_data);
     }
+
     public function guardar(Request $request) {
         try {
             //Define la entidad servicio
-            $titulo = "Modificar producto";
-            $entidad = new Producto();
-            $entidad->cargarDesdeRequest($request); //agarra el request del formulario y lo carga al propio objeto
+            $titulo = "Modificar Producto";
+            $entidad = new Producto ();
+            $entidad->cargarDesdeRequest($request);
+
+            if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) { //Se adjunta imagen
+                $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
+                 $nombre = date("Ymdhmsi") . ".$extension";
+                 $archivo = $_FILES["archivo"]["tmp_name"];
+                 move_uploaded_file($archivo, env('APP_PATH') . "/public/files/$nombre"); //guardaelarchivo
+                 $entidad->imagen = $nombre;
+            }
+  
 
             //validaciones
             if ($entidad->nombre == "") {
@@ -85,17 +107,29 @@ class ControladorProducto extends Controller
                 $msg["MSG"] = "Complete todos los datos";
             } else {
                 if ($_POST["id"] > 0) {
+                    $productAnt = new Producto();
+                    $productAnt->obtenerPorId($entidad->idproducto);
+
+                    if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK){
+                        //Eliminar imagen anterior
+                        @unlink(env('APP_PATH') . "/public/files/$productAnt->imagen");                          
+                    } else {
+                        $entidad->imagen = $productAnt->imagen;
+                    }
+ 
                     //Es actualizacion
                     $entidad->guardar();
 
-                    $msg["ESTADO"] = MSG_SUCCESS;// msg_SUCCESS esta almacenado en app->providers->star->constants.php 
+                    $msg["ESTADO"] = MSG_SUCCESS;
                     $msg["MSG"] = OKINSERT;
                 } else {
                     //Es nuevo
                     $entidad->insertar();
+
+                    $msg["ESTADO"] = MSG_SUCCESS;
                     $msg["MSG"] = OKINSERT;
                 }
-               
+                
                 $_POST["id"] = $entidad->idproducto;
                 return view('producto.producto-listar', compact('titulo', 'msg'));
             }
@@ -108,31 +142,59 @@ class ControladorProducto extends Controller
         $producto = new Producto();
         $producto->obtenerPorId($id);
 
-        return view('producto.producto-nuevo', compact('msg', 'producto', 'titulo')) . '?id=' . $producto->idproducto;
+      
 
+        return view('producto.producto-nuevo', compact('msg', 'producto', 'titulo')) . '?id=' . $producto->idproducto;
 
     }
 
     public function editar($id)
     {
-        $titulo = "Modificar cliente";
+        $titulo = "Modificar Producto";
+        //pregunta si el usuario esta autentificado
         if (Usuario::autenticado() == true) {
-            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
-                $codigo = "MENUMODIFICACION";
+            if (!Patente::autorizarOperacion("PRODUCTOMODIFICACION")) {
+                $codigo = "PRODUCTOMODIFICACION";
                 $mensaje = "No tiene pemisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
-               
-                
-
                 $producto = new Producto();
                 $producto->obtenerPorId($id);
 
-                return view('producto.producto-nuevo', compact('menu', 'titulo'));
+                $categoria = new Categoria();
+                $aCategorias = $categoria->obtenerTodos();
+
+                return view('producto.producto-nuevo', compact('producto', 'titulo', 'aCategorias'));
             }
         } else {
             return redirect('admin/login');
         }
+    }
+
+    public function eliminar(Request $request){
+        
+        $id = $request->input('id');
+
+        if (Usuario::autenticado() == true) {
+            if (Patente::autorizarOperacion("PRODUCTOELIMINAR")) {
+
+                $entidad = new Producto();
+                $entidad->cargarDesdeRequest($request);
+                @unlink(env('APP_PATH') . "/public/files/$entidad->imagen");                         
+                $entidad->eliminar();
+
+               
+                $aResultado["err"] = EXIT_SUCCESS; //eliminado correctamente
+            } else {
+                $codigo = "PRODUCTOELIMINAR";
+                $aResultado["err"] = "No tiene pemisos para la operaci&oacute;n.";
+            }
+            echo json_encode($aResultado);
+        } else {
+            return redirect('admin/login');
+        }
+    }
+
 
 }
-}
+?>

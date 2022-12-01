@@ -43,28 +43,34 @@ if (isset($msg)) {
         echo '<script>msgShow("' . $msg["MSG"] . '""' . $msg["ESTADO"] . '")</script>';
     }
     ?>
-    <form id="form1" method="POST">
+    <form id="form1" method="POST"enctype="multipart/form-data">
         <div class="row">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
             <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
 
             <div class="form-group col-lg-12">
                 <label>Fecha: *</label>
-                <input type="date" id="txtFecha" name="txtFecha" class="form-control" value="" required>
+                <input type="date" id="txtFecha" name="txtFecha" class="form-control" value="{{$pedido->fecha}}" required>
             </div>
             <div class="form-group col-lg-12">
                 <label>Descripcion: *</label>
-                <textarea type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="" required></textarea>
+                <textarea type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="{{$pedido->descripcion}}" required></textarea>
             </div>
 
             <div class="form-group col-lg-12">
                 <label>Sucursal: *</label>
-                <select id="lstSucursal" name="lstSucursal" class="form-control" value="" required>
+                <select id="lstSucursal" name="lstSucursal" class="form-control" value="{{$pedido->sucursal}}" required>
                     <option disabled selected>Seleccionar</option>
 
                     @foreach($aSucursales as $item)
-                    <option id="{{ $item->idsucursal}}">{{ $item->nombre}}</option>
-                    @endforeach
+                    @if ($item->idsucursal == $pedido->fk_idsucursal)
+
+                    <option value="{{ $item->idsucursal}}">{{ $item->nombre}}</option>
+                    @else
+                    <option value="{{ $item->idsucursal}}">{{ $item->nombre}}</option>
+                    @endif
+                   @endforeach
+                   
                 </select>
             </div>
             <div class="form-group col-lg-12">
@@ -73,8 +79,12 @@ if (isset($msg)) {
                     <option disabled selected>Seleccionar</option>
 
                     @foreach($aClientes as $item)
+                    @if ($item->idcliente == $pedido->fk_idcliente)
                     <option value="{{ $item->idcliente}}">{{ $item->nombre}}{{ $item->apellido}}</option>
-                    @endforeach
+                   @else
+                   <option value="{{ $item->idcliente}}">{{ $item->nombre}}</option>
+                    @endif
+                   @endforeach
                 </select>
             </div>
             <div class="form-group col-lg-12"> <label>Estado: *</label>
@@ -82,6 +92,7 @@ if (isset($msg)) {
                     <option disabled selected>Seleccionar</option>
 
                     @foreach($aEstados as $item)
+                    @if ($item->idestado == $pedido->fk_idestado)
                     <option value="{{ $item->idestado}}">{{ $item->nombre}}</option>
                     @endforeach
                 </select>

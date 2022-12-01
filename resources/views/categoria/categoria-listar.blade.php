@@ -3,12 +3,12 @@
 @section('titulo', "$titulo")
 
 @section('scripts')
-<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet">
+<link href="{{ asset('css/datatables.min.css') }}" rel="stylesheet"> <!--asset signif que lo va a ir a buscar a a carpeta public-->
 <script src="{{ asset('js/datatables.min.js') }}"></script>
 @endsection
 @section('breadcrumb')
 <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="/admin">Inicio</a></li>
+    <li class="breadcrumb-item"><a href="/home">Inicio</a></li>
     <li class="breadcrumb-item active">Categoria</a></li>
 </ol>
 <ol class="toolbar">
@@ -34,6 +34,7 @@ if (isset($msg)) {
     </thead>
 </table> 
 <script>
+    $(document). ready( function (){
 	var dataTable = $('#grilla').DataTable({
 	    "processing": true,
         "serverSide": true,
@@ -44,5 +45,6 @@ if (isset($msg)) {
         "order": [[ 0, "asc" ]],
 	    "ajax": "{{ route('categoria.cargarGrilla') }}"
 	});
+});
 </script>
 @endsection

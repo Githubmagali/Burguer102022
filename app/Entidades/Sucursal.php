@@ -29,6 +29,17 @@ class Sucursal extends Model{
          
           
       }
+      public function guardar() {
+        $sql = "UPDATE $this->table SET
+           nombre='$this->nombre',
+           telefono='$this->telefono',
+           direccion=$this->direccion,
+           linkmapa=$this->linkmapa
+          
+            
+            WHERE idsucursal=?";
+        $affected = DB::update($sql, [$this->idsucursal]);
+    }
 
       public function insertar ()
 {
@@ -48,17 +59,7 @@ class Sucursal extends Model{
             ]);
             return $this->idsucursal = DB:: getPdo()->lastInstertId();
 }
-public function guardar() {
-      $sql = "UPDATE $this->table SET
-         nombre='$this->nombre',
-         telefono='$this->telefono',
-         direccion='$this->direccion',
-         linkmapa='$this->linkmapa'
-        
-          
-          WHERE idsucursal=?";
-      $affected = DB::update($sql, [$this->idsucursal]);
-  }
+
   public function eliminar()
   {
       $sql = "DELETE FROM $this->table  WHERE idsucursal=?";
@@ -76,7 +77,7 @@ public function guardar() {
                   A.telefono,
                   A.direccion,
                   A.linkmapa
-                FROM sucursales A ORDER BY A.nombre ";
+                FROM $this->table A ORDER BY A.nombre ";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
     }
@@ -84,25 +85,61 @@ public function guardar() {
     public function obtenerPorId($idsucursal)
     {
         $sql = "SELECT
+                idsucursal,
                 nombre,
                 telefono,
                 direccion,
                 linkmapa
 
-                FROM sucursales WHERE idsucursal = $idsucursal";
+                FROM $this->table WHERE idsucursal = $idsucursal";
         $lstRetorno = DB::select($sql);
   
         if (count($lstRetorno) > 0) {
             $this->idsucursal = $lstRetorno[0]->idsucursal;
             $this->nombre = $lstRetorno[0]->nombre;
             $this->telefono= $lstRetorno[0]->telefono;
+            $this->direccion= $lstRetorno[0]->direccion;
             $this->linkmapa= $lstRetorno[0]->linkmapa;
-            
-          
-            
-            return $this;
+             return $this;
         }
         return null;
+    }
+    public function obtenerFiltrado()
+    {
+        $request = $_REQUEST;
+        $columns = array(
+            0 => 'A.idsucursal',
+            1 => 'A.nombre',
+            2 => 'A.telefono',
+            3 => 'A.direccion',
+            4 => 'A.linkmapa'
+        );
+        $sql = "SELECT DISTINCT
+                    A.idsucursal,
+                    A.nombre,
+                    A.telefono,
+                    A.direccion,
+                    A.linkmapa
+                   
+                    FROM sucursales A
+                    
+                WHERE 1=1 
+                ";
+//WHERE 1=1  contatena si la persona busca algo dice 1=1 nombre=nombre LIKE compara
+        //Realiza el filtrado
+        if (!empty($request['search']['value'])) { //empieza con AND porque concatena con 1=1 entonces es igual a decir "y igual nombre =daniel OR 
+            $sql .= " AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' ";
+            $sql .= " OR A.telefono LIKE '%" . $request['search']['value'] . "%' ";
+            $sql .= " OR A.direccion LIKE '%" . $request['search']['value'] . "%' )";
+            $sql .= " OR A.linkmapa LIKE '%" . $request['search']['value'] . "%' ";
+            
+           
+        }
+        $sql .= " ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
+
+        $lstRetorno = DB::select($sql);
+
+        return $lstRetorno;
     }
 
     

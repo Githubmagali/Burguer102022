@@ -24,7 +24,7 @@
 </ol>
 <script>
 function fsalir(){
-    location.href ="/admin";
+    location.href ="/admin/producto";
 }
 </script>
 @endsection
@@ -63,6 +63,10 @@ if (isset($msg)){
                 <label>Categoria: *</label>
                     <select type="lst" id="lstCategoria" name="lstCategoria" class="form-control selectpicker" data-live-search="true" value="" required>
                 <option value="" disabled selected>Seleccionar</option>
+                
+                @foreach($aCategorias as $item)
+                <option value="{{ $item->idcategoria}}">{{$item->nombre}}</option>
+                @endforeach
             </select>
                 </div>
                 <div class="form-group col-lg-12">

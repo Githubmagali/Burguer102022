@@ -52,28 +52,24 @@ class Postulacion extends Model{
             ]);
             return $this->idpostulacion = DB:: getPdo()->lastInstertId();
 }
-public function guardar() {
-      $sql = "UPDATE $this->table SET
-         nombre='$this->nombre',
-         apellido='$this->apellido',
-         celular='$this->celular',
-         correo='$this->correo',
-         curriculum='$this->curriculum'
-          
-          WHERE idpostulacion=?";
-      $affected = DB::update($sql, [$this->idpostulacion]);
-  }
-  public function eliminar()
+public function obtenerTodos()
   {
-      $sql = "DELETE FROM $this->table WHERE idpostulacion=?";
-
-
-      $affected = DB::delete($sql, [$this->idpostulacion]);
+      $sql = "SELECT
+                A.idpostulacion,
+                A.nombre,
+                A.apellido,
+                A.celular,
+                A.correo,
+                A.curriculum
+              FROM $this->table A BY A.idpostulacion DESC ";
+      $lstRetorno = DB::select($sql);
+      return $lstRetorno;
   }
   
   public function obtenerPorId($idpostulacion)
     {
         $sql = "SELECT
+             idpostulacion,
               nombre,
               apellido,
               celular,
@@ -96,18 +92,65 @@ public function guardar() {
         }
         return null;
     }
+public function guardar() {
+      $sql = "UPDATE $this->table SET
+         nombre='$this->nombre',
+         apellido='$this->apellido',
+         celular='$this->celular',
+         correo='$this->correo',
+         curriculum='$this->curriculum'
+          
+          WHERE idpostulacion=?";
+      $affected = DB::update($sql, [$this->idpostulacion]);
+  }
+  public function eliminar()
+  {
+      $sql = "DELETE FROM $this->table WHERE idpostulacion=?";
 
-    public function obtenerTodos()
+
+      $affected = DB::delete($sql, [$this->idpostulacion]);
+  }
+  
+    public function obtenerFiltrado()
     {
-        $sql = "SELECT
-                  A.idpostulacion,
-                  A.nombre,
-                  A.apellido,
-                  A.celular,
-                  A.correo,
-                  A.curriculum
-                FROM $this->table A BY A.idpostulacion DESC";
+        $request = $_REQUEST;
+        $columns = array(
+            0 =>'A.idpostulacion',
+            1 => 'A.nombre',
+            2 => 'A.apellido',
+            3 => 'A.celular',
+            4 => 'A.correo',
+            5 => 'A.curriculum'
+        );
+        $sql = "SELECT DISTINCT
+                    A.idpostulacion,
+                    A.nombre,
+                    A.apellido,
+                    A.celular,
+                    A.correo,
+                    A.curriculum
+                   
+                    FROM postulaciones A
+                    
+                WHERE 1=1 
+                ";
+//WHERE 1=1  contatena si la persona busca algo dice 1=1 nombre=nombre LIKE compara
+        //Realiza el filtrado
+        if (!empty($request['search']['value'])) {
+            $sql .= " AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' ";
+            $sql .= " OR A.apellido LIKE '%" . $request['search']['value'] . "%' ";
+            $sql .= " OR A.celular LIKE '%" . $request['search']['value'] . "%' )";
+            $sql .= " OR A.correo LIKE '%" . $request['search']['value'] . "%' ";
+            $sql .= " OR A.curriculum LIKE '%" . $request['search']['value'] . "%' ";
+           
+        }
+        $sql .= " ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
+
         $lstRetorno = DB::select($sql);
+
         return $lstRetorno;
     }
+
+
+   
 }

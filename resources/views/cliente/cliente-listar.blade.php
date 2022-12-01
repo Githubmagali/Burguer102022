@@ -26,6 +26,7 @@ if (isset($msg)) {
 <table id="grilla" class="display">
     <thead>
         <tr>
+            <th></th>
             <th>Nombre y apellido</th>
             <th>DNI</th>
             <th>Correo</th>
@@ -34,7 +35,8 @@ if (isset($msg)) {
     </thead>
 </table> 
 <script>
-	var dataTable = $('#grilla').DataTable({
+    $(document). ready( function (){
+	var dataTable = $('#grilla').DataTable({ //esta linea le da ese aspecto visual
 	    "processing": true,
         "serverSide": true,
 	    "bFilter": true,
@@ -44,5 +46,6 @@ if (isset($msg)) {
         "order": [[ 0, "asc" ]],
 	    "ajax": "{{ route('cliente.cargarGrilla') }}"
 	});
+});
 </script>
 @endsection

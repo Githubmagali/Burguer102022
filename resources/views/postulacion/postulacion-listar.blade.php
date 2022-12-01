@@ -27,14 +27,17 @@ if (isset($msg)) {
 <table id="grilla" class="display">
     <thead>
         <tr>
-            <th>Nombre y apellido</th>
-            <th>DNI</th>
-            <th>Correo</th>
+            <th></th>
+            <th>Nombre</th>
+            <th>Apellido</th>
             <th>Celular</th>
+            <th>Correo</th>
+            <th>CV</th>
         </tr>
     </thead>
 </table> 
 <script>
+    $(document). ready( function (){
 	var dataTable = $('#grilla').DataTable({
 	    "processing": true,
         "serverSide": true,
@@ -45,5 +48,6 @@ if (isset($msg)) {
         "order": [[ 0, "asc" ]],
 	    "ajax": "{{ route('postulacion.cargarGrilla') }}"
 	});
+});
 </script>
 @endsection

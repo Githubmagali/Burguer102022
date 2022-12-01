@@ -13,6 +13,9 @@ require app_path().'/start/constants.php';
 use Session;
 
 class ControladorUsuario extends Controller
+
+
+
 {
     public function index(){
         $titulo = "Listado de usuarios";
@@ -200,5 +203,27 @@ class ControladorUsuario extends Controller
         }
         echo json_encode($msg);
     }
-    
+    public function editar($id)
+    {
+        $titulo = "Modificar cliente";
+        if (Usuario::autenticado() == true) {
+            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
+                $codigo = "MENUMODIFICACION";
+                $mensaje = "No tiene pemisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+               
+                
+
+                $usuario = new Usuario();
+                $usuario->obtenerPorId($id);
+
+                return view('usuario.usuario-nuevo', compact('menu', 'titulo'));
+            }
+        } else {
+            return redirect('admin/login');
+        }
+
+
+}
 }

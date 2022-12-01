@@ -4,7 +4,7 @@
 
 <script>
     globalId = '<?php echo isset($pedido->idpedido) && $pedido->idpedido > 0 ? $pedido->idpedido : 0; ?>';
-    <?php $globalId = isset($pedido->idpedido) ? $pedido->idpedido : "0";?>
+    <?php $globalId = isset($pedido->idpedido) ? $pedido->idpedido : "0"; ?>
 </script>
 @endsection
 @section('breadcrumb')
@@ -23,99 +23,111 @@
     <li class="btn-item"><a title="Salir" href="#" class="fa fa-arrow-circle-o-left" aria-hidden="true" onclick="javascript: $('#modalSalir').modal('toggle');"><span>Salir</span></a></li>
 </ol>
 <script>
-function fsalir(){
-    location.href ="/admin";
-}
+    function fsalir() {
+        location.href = "/admin/pedido";
+    }
 </script>
 @endsection
 @section('contenido')
 <?php
-if (isset($msg)){
+if (isset($msg)) {
     echo '<div id= "msg"></div>';
     echo '<script>msgShow("' . $msg["MSG"] . '","' . $msg["ESTADO"] . '")</script>';
-    }
-    ?>
+}
+?>
 
 <div class="panel-body">
     <div id="msg"></div>
     <?php
-    if (isset($msg)){
-        echo '<script>msgShow("' . $msg["MSG"] . '""' . $msg["ESTADO"] .'")</script>';
+    if (isset($msg)) {
+        echo '<script>msgShow("' . $msg["MSG"] . '""' . $msg["ESTADO"] . '")</script>';
     }
     ?>
-<form id="form1" method="POST">
-            <div class="row">
-                <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
-                <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
-                
-                    <div class="form-group col-lg-12">
-                    <label>Fecha: *</label>
-                    <input type="date" id="txtFecha" name="txtFecha" class="form-control" value="" required>
-                </div>
-                <div class="form-group col-lg-12">
+    <form id="form1" method="POST">
+        <div class="row">
+            <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
+            <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
+
+            <div class="form-group col-lg-12">
+                <label>Fecha: *</label>
+                <input type="date" id="txtFecha" name="txtFecha" class="form-control" value="" required>
+            </div>
+            <div class="form-group col-lg-12">
                 <label>Descripcion: *</label>
-                    <textarea type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="" required></textarea>
-                </div>
-                
-                <div class="form-group col-lg-12">
+                <textarea type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="" required></textarea>
+            </div>
+
+            <div class="form-group col-lg-12">
                 <label>Sucursal: *</label>
-                    <select id="lstSucursal" name="lstSucursal" class="form-control" value="" required>
-               <option disabled selected>Seleccionar</option>
-                
-               @foreach($aSucursales as $item)
-                <option id="{{ $item->idsucursal}}">{{ $item->nombre}}</option>
-                @endforeach
+                <select id="lstSucursal" name="lstSucursal" class="form-control" value="" required>
+                    <option disabled selected>Seleccionar</option>
+
+                    @foreach($aSucursales as $item)
+                    <option id="{{ $item->idsucursal}}">{{ $item->nombre}}</option>
+                    @endforeach
                 </select>
-                </div>
-                <div class="form-group col-lg-12">
+            </div>
+            <div class="form-group col-lg-12">
                 <label>Cliente: *</label>
-                    <select type="lst" id="lstCliente" name="lstCliente" class="form-control" value="" required></select>
-                </div>
-                <div class="form-group col-lg-12"> <label>Estado: *</label>
-                    <select type="lst" id="lstEstado" name="lstEstado" class="form-control" value="" required></select>
-                </div>
-                <div class="form-group col-lg-12">
+                <select id="lstCliente" name="lstCliente" class="form-control" value="" required>
+                    <option disabled selected>Seleccionar</option>
+
+                    @foreach($aClientes as $item)
+                    <option value="{{ $item->idcliente}}">{{ $item->nombre}}{{ $item->apellido}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group col-lg-12"> <label>Estado: *</label>
+            <select id="lstEstado" name="lstEstado" class="form-control" value="" required>
+                    <option disabled selected>Seleccionar</option>
+
+                    @foreach($aEstados as $item)
+                    <option value="{{ $item->idestado}}">{{ $item->nombre}}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="form-group col-lg-12">
                 <label>Total: *</label>
-                    <input type="number" id="txtTotal" name="txtTotal" class="form-control" value="" required>
-                </div>
-               
-</div>
-</form>
-<script>
+                <input type="number" id="txtTotal" name="txtTotal" class="form-control" value="" required>
+            </div>
 
-    $("#form1").validate();
+        </div>
+    </form>
+    <script>
+        $("#form1").validate();
 
-    function guardar() {
-        if ($("#form1").valid()) {
-            modificado = false;
-            form1.submit();
-        } else {
-            $("#modalGuardar").modal('toggle');
-            msgShow("Corrija los errores e intente nuevamente.", "danger");
-            return false;
-        }
-    }
-
-    function eliminar() {
-        $.ajax({
-            type: "GET",
-            url: "{{ asset('admin/pedido/eliminar') }}",
-            data: { id:globalId },
-            async: true,
-            dataType: "json",
-            success: function (data) {
-                if (data.err = "0") {
-                    msgShow("Registro eliminado exitosamente.", "success");
-                    $("#btnEnviar").hide();
-                    $("#btnEliminar").hide();
-                    $('#mdlEliminar').modal('toggle');
-                } else {
-                    msgShow("Error al eliminar", "success");
-                }
+        function guardar() {
+            if ($("#form1").valid()) {
+                modificado = false;
+                form1.submit();
+            } else {
+                $("#modalGuardar").modal('toggle');
+                msgShow("Corrija los errores e intente nuevamente.", "danger");
+                return false;
             }
-        });
-    }
+        }
 
-</script>
+        function eliminar() {
+            $.ajax({
+                type: "GET",
+                url: "{{ asset('admin/pedido/eliminar') }}",
+                data: {
+                    id: globalId
+                },
+                async: true,
+                dataType: "json",
+                success: function(data) {
+                    if (data.err = "0") {
+                        msgShow("Registro eliminado exitosamente.", "success");
+                        $("#btnEnviar").hide();
+                        $("#btnEliminar").hide();
+                        $('#mdlEliminar').modal('toggle');
+                    } else {
+                        msgShow("Error al eliminar", "success");
+                    }
+                }
+            });
+        }
+    </script>
 
-@endsection
+    @endsection

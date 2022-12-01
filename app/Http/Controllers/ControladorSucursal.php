@@ -15,8 +15,9 @@ class ControladorSucursal extends Controller
     public function nuevo()
     {
         $titulo = "Nuevo Sucursal";
+        $sucursal = new Sucursal();
        
-        return view ('sucursal.sucursal-nuevo', compact('titulo')); //en la carpeta resurses->views tenemos lass vistas
+        return view ('sucursal.sucursal-nuevo', compact('titulo', 'sucursal')); //en la carpeta resurses->views tenemos lass vistas
        
     }
     public function index()
@@ -33,6 +34,40 @@ class ControladorSucursal extends Controller
         } else {
             return redirect('admin/login');
         }
+    }
+    public function cargarGrilla()
+    {
+        $request = $_REQUEST;
+
+        $entidad = new Sucursal();
+        $aSucursales = $entidad->obtenerFiltrado();
+
+        $data = array();
+        $cont = 0;
+
+        $inicio = $request['start'];
+        $registros_por_pagina = $request['length'];
+
+
+        for ($i = $inicio; $i < count($aSucursales) && $cont < $registros_por_pagina; $i++) {
+            $row = array();
+            $row[] = $aSucursales[$i]->nombre;
+            $row[] = $aSucursales[$i]->telefono;
+            $row[] = $aSucursales[$i]->direccion;
+            $row[] = $aSucursales[$i]->linkmapa;
+            
+         
+            $cont++;
+            $data[] = $row;
+        }
+// formauna fila, lo adjunta en el array de data y json adjunta los datos del array conviertiendose en un json
+        $json_data = array(
+            "draw" => intval($request['draw']),
+            "recordsTotal" => count($aSucursales), //cantidad total de registros sin paginar
+            "recordsFiltered" => count($aSucursales), //cantidad total de registros en la paginacion
+            "data" => $data,
+        );
+        return json_encode($json_data);
     }
     public function guardar(Request $request) {
         try {
@@ -73,4 +108,26 @@ class ControladorSucursal extends Controller
         return view('sucursal.sucursal-nuevo', compact('msg', 'sucursal', 'titulo')) . '?id=' . $sucursal->idsucursal;
 
     }
+
+    public function editar($id)
+    {
+        $titulo = "Modificar cliente";
+        if (Usuario::autenticado() == true) {
+            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
+                $codigo = "MENUMODIFICACION";
+                $mensaje = "No tiene pemisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+               
+                
+
+                $sucursal = new Sucursal();
+                $sucursal->obtenerPorId($id);
+
+                return view('sucursal.sucursal-nuevo', compact('menu', 'titulo'));
+            }
+        } else {
+            return redirect('admin/login');
+        }
+}
 }

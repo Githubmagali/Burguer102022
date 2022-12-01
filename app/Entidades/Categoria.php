@@ -37,22 +37,7 @@ class Categoria extends Model{
             ]);
             return $this->idcategoria = DB:: getPdo()->lastInstertId();
 }
-public function guardar() {
-      $sql = "UPDATE $this->table SET
-         nombre='$this->nombre'
-          
-          WHERE idcategoria=?";
-      $affected = DB::update($sql, [$this->idcategoria]);
-  }
-  public function eliminar()
-  {
-      $sql = "DELETE FROM $this->table WHERE idcategoria=?";
-
-
-      $affected = DB::delete($sql, [$this->idcategoria]);
-  }
-  
-  public function obtenerPorId($idcategoria)
+public function obtenerPorId($idcategoria)
     {
         $sql = "SELECT
                 idcategoria,
@@ -77,6 +62,49 @@ public function guardar() {
                   A.nombre
                 FROM categorias A ORDER BY idcategoria";
         $lstRetorno = DB::select($sql);
+        return $lstRetorno;
+    }
+public function guardar() {
+      $sql = "UPDATE $this->table SET
+         nombre='$this->nombre'
+          
+          WHERE idcategoria=?";
+      $affected = DB::update($sql, [$this->idcategoria]);
+  }
+  public function eliminar()
+  {
+      $sql = "DELETE FROM $this->table WHERE idcategoria=?";
+
+
+      $affected = DB::delete($sql, [$this->idcategoria]);
+  }
+  
+  
+    public function obtenerFiltrado()
+    {
+        $request = $_REQUEST;
+        $columns = array(
+            0 => 'A.idcategoria',
+            1 => 'A.nombre'
+        );
+        $sql = "SELECT DISTINCT
+                    A.idcategoria,
+                    A.nombre
+                   
+                    FROM categoria A
+                    
+                WHERE 1=1 
+                ";
+//WHERE 1=1  contatena si la persona busca algo dice 1=1 nombre=nombre LIKE compara
+        //Realiza el filtrado
+        if (!empty($request['search']['value'])) {
+            $sql .= " AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' ";
+            
+        }
+        $sql .= " ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
+
+        $lstRetorno = DB::select($sql);
+
         return $lstRetorno;
     }
   

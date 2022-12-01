@@ -24,7 +24,7 @@
 </ol>
 <script>
 function fsalir(){
-    location.href ="/admin";
+    location.href ="/admin/cliente";
 }
 </script>
 @endsection

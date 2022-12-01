@@ -14,14 +14,16 @@ class ControladorCliente extends Controller
     public function nuevo()
     {
         $titulo = "Nuevo Cliente";
-        return view ('cliente.cliente-nuevo', compact('titulo')); //en la carpeta resurses->views tenemos lass vistas
+        $cliente =new Cliente();
+
+        return view ('cliente.cliente-nuevo', compact('titulo', 'cliente')); //en la carpeta resurses->views tenemos lass vistas
        
     }
-    public function index()
+    public function index() //carga la pantlla
     {
         $titulo = "Listado de cliente";
         if (Usuario::autenticado() == true) {
-            if (!Patente::autorizarOperacion("MENUCONSULTA")) {
+            if (!Patente::autorizarOperacion("MENUCONSULTA")) { //consulta si tiene el permiso
                 $codigo = "MENUCONSULTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
@@ -32,6 +34,43 @@ class ControladorCliente extends Controller
             return redirect('admin/login');
         }
     }
+
+    public function cargarGrilla()
+    {
+        $request = $_REQUEST;
+
+        $entidad = new Cliente();
+        $aClientes = $entidad->obtenerFiltrado();
+
+        $data = array();
+        $cont = 0;
+
+        $inicio = $request['start'];
+        $registros_por_pagina = $request['length'];
+
+
+        for ($i = $inicio; $i < count($aClientes) && $cont < $registros_por_pagina; $i++) {
+            $row = array();
+            $row[] = "<a href= '/admin/cliente/" . $aClientes[$i]->idcliente."' class='btn btn-secondary'><i class='fa-solid fa-pencil'></i></a>";
+            $row[] = $aClientes[$i]->nombre . "". $aClientes[$i]->apellido;
+            $row[] = $aClientes[$i]->dni;
+            $row[] = $aClientes[$i]->correo;
+            $row[] = $aClientes[$i]->celular;
+            $cont++;
+            $data[] = $row;
+        }
+
+        $json_data = array(
+            "draw" => intval($request['draw']),
+            "recordsTotal" => count($aClientes), //cantidad total de registros sin paginar
+            "recordsFiltered" => count($aClientes), //cantidad total de registros en la paginacion
+            "data" => $data,
+        );
+        return json_encode($json_data);
+    }
+
+  
+
     public function guardar(Request $request) {
         try {
             //Define la entidad servicio
@@ -70,6 +109,27 @@ class ControladorCliente extends Controller
 
         return view('cliente.cliente-nuevo', compact('msg', 'cliente', 'titulo')) . '?id=' . $cliente->idcliente;
 
+    }
+    public function editar($id)
+    {
+        $titulo = "Modificar cliente";
+        if (Usuario::autenticado() == true) {
+            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
+                $codigo = "MENUMODIFICACION";
+                $mensaje = "No tiene pemisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+               
+                
+
+                $cliente = new Cliente();
+                $cliente->obtenerPorId($id);
+
+                return view('cliente.cliente-nuevo', compact('menu', 'titulo'));
+            }
+        } else {
+            return redirect('admin/login');
+        }
     }
 
 }

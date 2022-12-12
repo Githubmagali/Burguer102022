@@ -57,13 +57,17 @@ if (isset($msg)) {
             </div>
             <div class="form-group col-lg-12">
                 <label>Precio: *</label>
-                <input type="text" id="txtPrecio" name="txtPrecio" class="form-control" value="{{$producto->precio}}" required>
+                <input type="number" id="txtPrecio" name="txtPrecio" class="form-control" value="{{$producto->precio}}" required>
             </div>
             <div class="form-group col-lg-12">
                 <label>Categoria: *</label>
-                <select type="lst" id="lstCategoria" name="lstCategoria" class="form-control selectpicker" data-live-search="true" value="{{$producto->categoria}}" required>
-                    <option value="" disabled selected>Seleccionar</option>
-
+                <select type="lst" id="lstCategoria" name="lstCategoria" class="form-control" value="">
+                    <option disabled selected>Seleccionar</option>
+                    @foreach($aCategorias as $item)
+                    @if ($item->idcategoria == $producto->fk_idcategoria)
+                    <option value="{{$item->idcategoria}}">{{$item->nombre}}</option>
+                    @endif
+                    @endforeach
                 </select>
             </div>
             <div class="form-group col-lg-12">

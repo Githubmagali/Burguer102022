@@ -41,7 +41,7 @@ class Cliente extends Model
           dni,
           celular,
           clave
-            ) VALUES (?, ?, ?,?,?,?);";
+            ) VALUES (?, ?, ?, ?, ?, ?);";
 
         $result = DB::insert(
             $sql,
@@ -64,7 +64,8 @@ class Cliente extends Model
                 apellido,
                 correo,
                 dni,
-                celular
+                celular,
+                clave
                 FROM clientes WHERE idcliente= $idcliente";
         $lstRetorno = DB::select($sql);
 
@@ -75,6 +76,7 @@ class Cliente extends Model
             $this->correo = $lstRetorno[0]->correo;
             $this->dni = $lstRetorno[0]->dni;
             $this->celular = $lstRetorno[0]->celular;
+            $this->clave = $lstRetorno[0]->clave;
 
             return $this;
         }
@@ -88,7 +90,8 @@ class Cliente extends Model
                 A.apellido,
                 A.correo,
                 A.dni,
-                A.celular
+                A.celular,
+                A.clave
               FROM $this->table A ORDER BY A.nombre";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
@@ -102,6 +105,7 @@ class Cliente extends Model
           correo='$this->correo',
           dni='$this->dni',
           celular='$this->celular'
+          clave='$this->clave'
           
           WHERE idcliente=?";
         $affected = DB::update($sql, [$this->idcliente]);
@@ -110,21 +114,24 @@ class Cliente extends Model
     {
         $sql = "DELETE FROM $this->table WHERE idcliente=?";
 
-        $affected = DB::delete($sql, [$this->idcliente]);
+        $affected = DB::delete($sql, [$this->idcliente]); //el id lo saca de this->idcliente que lo carga el cargarDesdeRequest
     }
 
     
 
     
     public function obtenerFiltrado()
-    {
+    { //la llamada de javascript los datos es atraves de 'ajax'
+        //se encuentran en 'red' en la parte'cargarGrilla'
+        //el json te devuelve la info registrada
         $request = $_REQUEST;
         $columns = array(
-            0 => 'A.idcliente',
+            0 => 'A.idcliente', //columnas de ordenamiento
             1 => 'A.nombre',
             2 => 'A.dni',
             3 => 'A.correo',
-            4 => 'A.celular'
+            4 => 'A.celular',
+            5 => 'A.clave',
         );
         $sql = "SELECT DISTINCT
                     A.idcliente,
@@ -141,16 +148,18 @@ class Cliente extends Model
                 ";
 //WHERE 1=1  contatena si la persona busca algo dice 1=1 nombre=nombre LIKE compara
         //Realiza el filtrado
-        if (!empty($request['search']['value'])) {
-            $sql .= " AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' ";
+        if (!empty($request['search']['value'])) { //concatena el filtrado
+            $sql .= " AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' "; //empieza con AND porque
+            //concatena con la query, donde 1=1 AND A.nombre sea igual a determinado resultado ej Alan
             $sql .= " OR A.apellido LIKE '%" . $request['search']['value'] . "%' ";
+            //LIKE es para que lo contenga
             $sql .= " OR A.correo LIKE '%" . $request['search']['value'] . "%' )";
             $sql .= " OR A.dni LIKE '%" . $request['search']['value'] . "%' ";
             $sql .= " OR A.celular LIKE '%" . $request['search']['value'] . "%' ";
             $sql .= " OR A.clave LIKE '%" . $request['search']['value'] . "%' ";
         }
         $sql .= " ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
-
+//ORDER BY concatena la parte de ordenamiento, viene por la querystream
         $lstRetorno = DB::select($sql);
 
         return $lstRetorno;

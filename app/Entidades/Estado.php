@@ -14,9 +14,8 @@ class Estado extends Model{
             'nombre'
       ];
 
-      protected $hidden = [
+      protected $hidden = [];
 
-      ];
       public function cargarDesdeRequest($request)
     {
         $this->idestado = $request->input('id') != "0" ? $request->input('id') : $this->idestado;
@@ -84,7 +83,8 @@ public function guardar() {
         $request = $_REQUEST;
         $columns = array(
            
-            0 => 'A.nombre'
+            0 => 'A.idestado',
+            1 => 'A.nombre'
         );
         $sql = "SELECT DISTINCT
                     A.idestado,

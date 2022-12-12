@@ -3,7 +3,7 @@
 @section('scripts')
 
 <script>
-    globalId = '<?php echo isset($postulacion->idpostulacion) && $cliente->idpostulacion > 0 ? $postulacion->idpostulacion : 0; ?>';
+    globalId = '<?php echo isset($postulacion->idpostulacion) && $postulacion->idpostulacion > 0 ? $postulacion->idpostulacion : 0; ?>';
     <?php $globalId = isset($postulacion->idpostulacion) ? $postulacion->idpostulacion : "0";?>
 </script>
 @endsection
@@ -61,7 +61,7 @@ if (isset($msg)){
                 </div>
                 <div class="form-group col-lg-12">
                     <label>CV:</label>
-                    <input type="file" id="" name="archivo"value="{{$postulacion->curriculum}}">
+                    <input type="file" id="archivo" name="archivo" class="form-control"value="{{$postulacion->curriculum}}">
                 </div>
 </div>
 </form>

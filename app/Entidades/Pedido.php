@@ -66,7 +66,7 @@ public function obtenerTodos()
                 A.fk_idcliente,
                 A.fk_idestado,
                 A.total
-              FROM pedidos A ORDER BY A.descripcion";
+              FROM pedidos A ORDER BY A.fecha";
       $lstRetorno = DB::select($sql);
       return $lstRetorno;
   }

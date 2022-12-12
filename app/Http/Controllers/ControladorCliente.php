@@ -16,8 +16,8 @@ class ControladorCliente extends Controller
         
         $titulo = "Nuevo Cliente";
         if (Usuario::autenticado() == true) { //validación
-            if (!Patente::autorizarOperacion("CLIENTECONSULTA")) { //otra validación
-                $codigo = "CLIENTECONSULTA";
+            if (!Patente::autorizarOperacion("CLIENTEALTA")) { //otra validación
+                $codigo = "CLIENTEALTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
@@ -49,34 +49,36 @@ class ControladorCliente extends Controller
     {
         $request = $_REQUEST;
 
-        $entidad = new Cliente();
-        $aClientes = $entidad->obtenerFiltrado();
-
+        $entidad = new Cliente(); //primero vamosa la base de datos
+        $aClientes = $entidad->obtenerFiltrado(); //llama al metodo para que me devuelva los datos figurados
+//def en la entidad cliente
         $data = array();
-        $cont = 0;
+        $cont = 0; //le devuelve los datos del array recorrido
+        //tenemos que armar el json solo la cantidad de registros indicada
 
-        $inicio = $request['start'];
-        $registros_por_pagina = $request['length'];
+        $inicio = $request['start']; //de donde va a empezar
+        $registros_por_pagina = $request['length']; //cant de registros por pag
 
 
         for ($i = $inicio; $i < count($aClientes) && $cont < $registros_por_pagina; $i++) {
-            $row = array();
-            $row[] = "<a href= '/admin/cliente/" . $aClientes[$i]->idcliente."' class='btn btn-secondary'><i class='fa-solid fa-pencil'></i></a>";
+            $row = array(); //el inicio lo calcula la grilla y lo va a hacer mientras alla la cant
+            //de clientes posibles y ademas sea la cant de clientes a mostrar
+            $row[] = "<a href= '/admin/cliente/" . $aClientes[$i]->idcliente. "'class='btn btn-secondary'><i class='fa-solid fa-pencil'></i></a>";
             $row[] = $aClientes[$i]->nombre . "". $aClientes[$i]->apellido;
             $row[] = $aClientes[$i]->dni;
             $row[] = $aClientes[$i]->correo;
             $row[] = $aClientes[$i]->celular;
-            $cont++;
-            $data[] = $row;
+            $cont++; //crea una fila con datos
+            $data[] = $row; //lo agrega a data, despues lo adjunta en el json
         }
 
-        $json_data = array(
+        $json_data = array( //json pide que tenga esta serie de datos
             "draw" => intval($request['draw']),
             "recordsTotal" => count($aClientes), //cantidad total de registros sin paginar
             "recordsFiltered" => count($aClientes), //cantidad total de registros en la paginacion
-            "data" => $data,
+            "data" => $data, //datos del array
         );
-        return json_encode($json_data);
+        return json_encode($json_data); //devuelve el json convertido
     }
 
   
@@ -89,13 +91,7 @@ class ControladorCliente extends Controller
             $entidad->cargarDesdeRequest($request); //agarra el request del formulario y lo carga al propio objeto
 
 
-            if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) { //Se adjunta imagen
-                $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
-                 $nombre = date("Ymdhmsi") . ".$extension";
-                 $archivo = $_FILES["archivo"]["tmp_name"];
-                 move_uploaded_file($archivo, env('APP_PATH') . "/public/files/$nombre"); //guardaelarchivo
-                 $entidad->imagen = $nombre;
-             }
+           
             //validaciones
             if ($entidad->nombre == "") {
                 $msg["ESTADO"] = MSG_ERROR;
@@ -103,16 +99,8 @@ class ControladorCliente extends Controller
             } else {
                 if ($_POST["id"] > 0) {
                     //Es actualizacion
-                    $productAnt = new Cliente();
-                    $productAnt->obtenerPorId($entidad->idcliente);
-
-
-                    if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK){
-                        //Eliminar imagen anterior
-                        @unlink(env('APP_PATH') . "/public/files/$productAnt->imagen");                            
-                    } else {
-                        $entidad->imagen = $productAnt->imagen;
-                    }
+                  
+                    
 
                     $entidad->guardar();
 
@@ -133,26 +121,24 @@ class ControladorCliente extends Controller
         }
 
         $id = $entidad->cliente;
-        $cliente = new Cliente();
+        $cliente = new Cliente(); 
         $cliente->obtenerPorId($id);
 
         return view('cliente.cliente-nuevo', compact('msg', 'cliente', 'titulo')) . '?id=' . $cliente->idcliente;
 
     }
-    public function editar($id)
+    public function editar($id) //viene el id por parametro
     {
         $titulo = "Modificar cliente";
-        if (Usuario::autenticado() == true) {
+        if (Usuario::autenticado() == true) { //pregunta si el usuario esta autenticado ya que no cualquiera puede editar
             if (!Patente::autorizarOperacion("CLIENTEEDITAR")) {
                 $codigo = "CLIENTEEDITAR";
                 $mensaje = "No tiene pemisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
                
-                
-
-                $cliente = new Cliente();
-                $cliente->obtenerPorId($id);
+                $cliente = new Cliente(); //va a la base de datos
+                $cliente->obtenerPorId($id); //busca por el id que vino por parametro que lo envio la hoja de rutar
 
                 return view('cliente.cliente-nuevo', compact('menu', 'titulo'));
             }
@@ -161,15 +147,15 @@ class ControladorCliente extends Controller
         }
     }
 
-    public function eliminar(Request $request)
+    public function eliminar(Request $request) //el eliminar viaja por ajax y se puede ver en la consola de la pagina 'Red'
     {
-        $id = $request->input('id');
+        $id = $request->input('id'); //recupera el id que vino por la querystream por la propiedad $request
 
-        if (Usuario::autenticado() == true) {
+        if (Usuario::autenticado() == true) { //pregunata si el usuario esta autenticado porque no cualquiera pueda eliminar
             if (Patente::autorizarOperacion("CLIENTEELIMINAR")) {
 
               
-                $entidad = new Cliente();
+                $entidad = new Cliente(); //llama a la entidad
                 $entidad->cargarDesdeRequest($request);
                 $entidad->eliminar();
                

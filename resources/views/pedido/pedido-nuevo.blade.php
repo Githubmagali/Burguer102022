@@ -66,8 +66,6 @@ if (isset($msg)) {
                     @if ($item->idsucursal == $pedido->fk_idsucursal)
 
                     <option value="{{ $item->idsucursal}}">{{ $item->nombre}}</option>
-                    @else
-                    <option value="{{ $item->idsucursal}}">{{ $item->nombre}}</option>
                     @endif
                    @endforeach
                    
@@ -87,17 +85,21 @@ if (isset($msg)) {
                    @endforeach
                 </select>
             </div>
-            <div class="form-group col-lg-12"> <label>Estado: *</label>
-            <select id="lstEstado" name="lstEstado" class="form-control" value="" required>
+            <div class="form-group col-lg-12">
+                <label>Estado: *</label>
+                <select id="lstEstado" name="lstEstado" class="form-control" value="{{$pedido->estado}}" required>
                     <option disabled selected>Seleccionar</option>
 
                     @foreach($aEstados as $item)
                     @if ($item->idestado == $pedido->fk_idestado)
+                    
                     <option value="{{ $item->idestado}}">{{ $item->nombre}}</option>
-                    @endforeach
+                    @endif
+                   @endforeach
+                   
                 </select>
             </div>
-            <div class="form-group col-lg-12">
+             <div class="form-group col-lg-12">
                 <label>Total: *</label>
                 <input type="number" id="txtTotal" name="txtTotal" class="form-control" value="" required>
             </div>

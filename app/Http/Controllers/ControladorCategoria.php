@@ -17,8 +17,8 @@ class ControladorCategoria extends Controller
         $titulo = "Nuevo Categoria";
 
         if (Usuario::autenticado() == true) { //validación
-            if (!Patente::autorizarOperacion("CATEGORIACONSULTA")) { //otra validación
-                $codigo = "CATEGORIACONSULTA";
+            if (!Patente::autorizarOperacion("CATEGORIALTA")) { //otra validación
+                $codigo = "CATEGORIAALTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
@@ -44,7 +44,9 @@ class ControladorCategoria extends Controller
             return redirect('admin/login');
         }
     }
-    public function cargarGrilla()
+    public function cargarGrilla() //utiliza un json, es un metodo de javascript
+    //javascript utiliza ajax para llamar al metodo que ajax busca los metodos por php al servidor
+    //si inspecciono en la pag web en la solapa 'red' vemos todas las llamadas en ajax
     {
         $request = $_REQUEST;
 
@@ -82,13 +84,7 @@ class ControladorCategoria extends Controller
             $entidad = new  Categoria();
             $entidad->cargarDesdeRequest($request); //agarra el request del formulario y lo carga al propio objeto
 
-            if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) { //Se adjunta imagen
-                $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
-                 $nombre = date("Ymdhmsi") . ".$extension";
-                 $archivo = $_FILES["archivo"]["tmp_name"];
-                 move_uploaded_file($archivo, env('APP_PATH') . "/public/files/$nombre"); //guardaelarchivo
-                 $entidad->imagen = $nombre;
-             }
+            
             //validaciones
             if ($entidad->nombre == "") {
                 $msg["ESTADO"] = MSG_ERROR;
@@ -100,12 +96,6 @@ class ControladorCategoria extends Controller
                     $productAnt->obtenerPorId($entidad->idcategoria);
 
 
-                    if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK){
-                        //Eliminar imagen anterior
-                        unlink("../public/files/$productAnt->imagen");   //productAnt lo busca y @unlink lo elimina                         
-                    } else {
-                        $entidad->imagen = $productAnt->imagen;
-                    }
 
                     $entidad->guardar();
 

@@ -19,16 +19,20 @@ class ControladorPedido extends Controller
         $titulo = "Nuevo Pedido";
 
         if (Usuario::autenticado() == true) { //validación
-            if (!Patente::autorizarOperacion("PEDIDOCONSULTA")) { //otra validación
-                $codigo = "PEDIDOCONSULTA";
+            if (!Patente::autorizarOperacion("PEDIDOALTA")) { //otra validación
+                $codigo = "PEDIDOALTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
                 $pedido = New Pedido();
                 $sucursal = New Sucursal();
                 $aSucursales = $sucursal->obtenerTodos();
+                $cliente = New Cliente();
+                $aClientes = $cliente->obtenerTodos();
+                $estado = New Estado();
+                $aEstados = $cliente->obtenerTodos();
            
-               return view( 'pedido.pedido-nuevo', compact ('titulo','pedido', 'aSucursales') );
+               return view( 'pedido.pedido-nuevo', compact ('titulo','pedido', 'aSucursales', 'aClientes', 'aEstados') );
             }
         } else {
             return redirect('admin/login');
@@ -38,8 +42,8 @@ class ControladorPedido extends Controller
     {
         $titulo = "Listado de pedidos";
         if (Usuario::autenticado() == true) {
-            if (!Patente::autorizarOperacion("PEDIDOCONSULTA")) {
-                $codigo = "PEDIDOCONSULTA";
+            if (!Patente::autorizarOperacion("PEDIDOVER")) {
+                $codigo = "PEDIDOVER";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
@@ -65,11 +69,12 @@ class ControladorPedido extends Controller
 
         for ($i = $inicio; $i < count($aPedidos) && $cont < $registros_por_pagina; $i++) {
             $row = array();
-            $row[] ="<a href='/admin/pedido/". $aPedidos[$i]->idpedido."' class='btn btn-secondary'><i class='fa-solid fa-pencil'></i></a>";
+            $row[] ="<a href='/admin/pedido/". $aPedidos[$i]->idpedido."'><i class='fa-solid fa-pencil'></i></a>";
             $row[] = date_format(date_create($aPedidos[$i]->fecha),"d/m/Y") ;
-            $row[] = $aPedidos[$i]->sucursal;
-            $row[] = "<a href='/admin/cliente/". $aPedidos[$i]->fk_idcliente."'>".$aPedidos[$i]->cliente."</a>"; //trae el nombre del cliente
-            $row[] = $aPedidos[$i]->estado;
+            $row[] = $aPedidos[$i]->descripcion;
+            $row[] = "<a href='/admin/sucursal/".$aPedidos[$i]->fk_idsucursal."' class='btn btn-secundary'>".$aPedidos[$i]->sucursal."</a>";
+            $row[] = "<a href='/admin/cliente/".$aPedidos[$i]->fk_idcliente."' class='btn btn-secundary'>".$aPedidos[$i]->cliente."</a>";
+            $row[] = "<a href='/admin/estado/".$aPedidos[$i]->fk_idestado."' class='btn btn-secundary'>".$aPedidos[$i]->estado."</a>";
             $row[] = $aPedidos[$i]->total;
             $cont++;
             $data[] = $row;
@@ -79,7 +84,7 @@ class ControladorPedido extends Controller
             "draw" => intval($request['draw']),
             "recordsTotal" => count($aPedidos), //cantidad total de registros sin paginar
             "recordsFiltered" => count($aPedidos), //cantidad total de registros en la paginacion
-            "data" => $data,
+            "data" => $data
         );
         return json_encode($json_data);
     }
@@ -169,7 +174,7 @@ public function eliminar(Request $request)
         $id = $request->input('id');
 
         if (Usuario::autenticado() == true) {
-            if (Patente::autorizarOperacion("PEDIDOELIMINAR")) {
+            if (Patente::autorizarOperacion("PEDIDOBAJA")) {
 
               
                 $entidad = new Pedido();
@@ -179,7 +184,7 @@ public function eliminar(Request $request)
 
                 $aResultado["err"] = EXIT_SUCCESS; //eliminado correctamente
             } else {
-                $codigo = "PEDIDOELIMINAR";
+                $codigo = "PEDIDOBAJA";
                 $aResultado["err"] = "No tiene pemisos para la operaci&oacute;n.";
             }
             echo json_encode($aResultado);

@@ -23,7 +23,7 @@ if (isset($msg)) {
     echo '<script>msgShow("' . $msg["MSG"] . '", "' . $msg["ESTADO"] . '")</script>';
 }
 ?>
-<table id="grilla" class="display">
+<table id="grilla" class="display"> 
     <thead>
         <tr>
             <th></th>
@@ -38,14 +38,19 @@ if (isset($msg)) {
     $(document). ready( function (){
 	var dataTable = $('#grilla').DataTable({ //esta linea le da ese aspecto visual
 	    "processing": true,
-        "serverSide": true,
+        "serverSide": true, //esta linea se procesa del lado de servidor
 	    "bFilter": true,
 	    "bInfo": true,
 	    "bSearchable": true,
         "pageLength": 25,
-        "order": [[ 0, "asc" ]],
-	    "ajax": "{{ route('cliente.cargarGrilla') }}"
-	});
+        "order": [[ 0, "asc" ]], //va a ordenar la columna 0 ascendente 0 =>'A.nombre'
+	    "ajax": "{{ route('cliente.cargarGrilla') }}" //busca los datos para esta grilla
+	//habilitamos la ruta con el nombre de la ruta
+    });
 });
 </script>
 @endsection
+<!--1ro convertimos el table con la funcion de java '.Datatable' a que el table
+que tiene in id se convierta en un .Datatable con la linea $('#grilla').DataTable
+este Datatable tiene una serie de config
+dentro del ControladorCliente def la funcion cargar Grilla -->

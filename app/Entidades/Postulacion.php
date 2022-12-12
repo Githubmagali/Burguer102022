@@ -6,7 +6,7 @@ use DB;
 use Illuminate\Database\Eloquent\Model;
 
 class Postulacion extends Model{
-      protected $table ='postulacion';
+      protected $table ='postulaciones';
       public $timestamps = false;
 
       protected $fillable = [
@@ -18,9 +18,8 @@ class Postulacion extends Model{
             'curriculum'
       ];
 
-      protected $hidden = [
-
-      ];
+      protected $hidden = [];
+      
       public function cargarDesdeRequest($request)
       {
           $this->idpostulacion = $request->input('id') != "0" ? $request->input('id') : $this->idpostulacion;
@@ -61,7 +60,7 @@ public function obtenerTodos()
                 A.celular,
                 A.correo,
                 A.curriculum
-              FROM $this->table A BY A.idpostulacion DESC ";
+              FROM $this->table A BY A.idpostulacion DESC";
       $lstRetorno = DB::select($sql);
       return $lstRetorno;
   }

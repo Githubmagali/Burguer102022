@@ -66,7 +66,7 @@ public function obtenerPorId($idcarrito)
     }
 public function guardar() {
       $sql = "UPDATE $this->table SET
-         fk_idcliente=$this->fk_idcliente,
+         fk_idcliente=$this->fk_idcliente
         
           
           WHERE idcarrito=?";

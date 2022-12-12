@@ -91,7 +91,7 @@ public function guardar() {
                     A.idcategoria,
                     A.nombre
                    
-                    FROM categoria A
+                    FROM categorias A
                     
                 WHERE 1=1 
                 ";

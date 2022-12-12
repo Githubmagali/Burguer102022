@@ -16,8 +16,11 @@
 
 Route::group(array('domain' => '127.0.0.1'), function () {
 
-    Route::get('/', 'ControladorWebHome@index');
- 
+    Route::get('/', 'ControladorWebHome@index'); //abre el index de nuestra pag web
+    Route::get('/takeaway', 'ControladorWebTakeaway@index');
+    Route::get('/nosotros', 'ControladorWebNosotros@index'); 
+    Route::get('/contacto', 'ControladorWebContacto@index');
+    Route::get('/mi-cuenta', 'ControladorWebMiCuenta@index');
 
     Route::get('/admin', 'ControladorHome@index');
     Route::post('/admin/patente/nuevo', 'ControladorPatente@guardar');
@@ -105,7 +108,9 @@ Route::get('/admin/cliente/nuevo', 'ControladorCliente@nuevo');
 Route::post('/admin/cliente/nuevo', 'ControladorCliente@guardar'); //metodo guardar para los registros
 Route::get('/admin/clientes', 'ControladorCliente@index');
 Route::get('/admin/cliente/cargarGrilla', 'ControladorCliente@cargarGrilla')->name('cliente.cargarGrilla');
-Route::get('/admin/cliente/eliminar', 'ControladorCliente@eliminar');//la ruta debe estar ANDES DE {id} ya que este equivale a cualquier dato
+// se le coloca /admin/cliente '/cargarGrilla' para diferenciarlo de /admin/clientes
+//el nombre es para que lo ubica en ajax con el nombre
+Route::get('/admin/cliente/eliminar', 'ControladorCliente@eliminar');//la ruta debe estar ANDES DE {id} ya que id equivale a cualquier dato y 'eliminar' es un dato estatico
 Route::get('/admin/cliente/{id}', 'ControladorCliente@editar'); //{}indica que es variable
 Route::post('/admin/cliente/{id}', 'ControladorCliente@guardar');
 /* --------------------------------------------- */
@@ -125,7 +130,7 @@ Route::post('/admin/postulacion/{id}', 'ControladorPostulacion@guardar');
 
 Route::get('/admin/pedido/nuevo', 'ControladorPedido@nuevo');
 Route::post('/admin/pedido/nuevo', 'ControladorPedido@guardar');
-Route::get('/admin/pedidos', 'ControladorPedidos@index');
+Route::get('/admin/pedidos', 'ControladorPedido@index');
 Route::get('/admin/pedido/cargarGrilla', 'ControladorPedido@cargarGrilla')->name('pedido.cargarGrilla');
 Route::get('/admin/pedido/eliminar', 'ControladorPedido@eliminar');
 Route::get('/admin/pedido/{id}', 'ControladorPedido@editar');

@@ -29,17 +29,7 @@ class Sucursal extends Model{
          
           
       }
-      public function guardar() {
-        $sql = "UPDATE sucursales SET
-           nombre='$this->nombre',
-           telefono='$this->telefono',
-           direccion=$this->direccion,
-           linkmapa=$this->linkmapa
-          
-            
-            WHERE idsucursal=?";
-        $affected = DB::update($sql, [$this->idsucursal]);
-    }
+     
 
       public function insertar ()
 {
@@ -59,7 +49,17 @@ class Sucursal extends Model{
             ]);
             return $this->idsucursal = DB:: getPdo()->lastInstertId();
 }
-
+public function guardar() {
+    $sql = "UPDATE sucursales SET
+       nombre='$this->nombre',
+       telefono='$this->telefono',
+       direccion=$this->direccion,
+       linkmapa=$this->linkmapa
+      
+        
+        WHERE idsucursal=?";
+    $affected = DB::update($sql, [$this->idsucursal]);
+}
   public function eliminar()
   {
       $sql = "DELETE FROM sucursales  WHERE idsucursal=?";

@@ -1,4 +1,3 @@
-            
 <?php
 
 namespace App\Entidades;
@@ -100,17 +99,17 @@ class Producto extends Model
                 A.imagen,
                 A.fk_idcategoria,
                 A.descripcion
-              FROM productos A ORDER BY idproducto ASC";
+              FROM productos A ORDER BY idproducto ";
         $lstRetorno = DB::select($sql);
         return $lstRetorno;
     }
     public function guardar()
     {
         $sql = "UPDATE productos SET
-          nombre=$this->nombre,
+          nombre='$this->nombre',
           cantidad=$this->cantidad,
           precio='$this->precio',
-          imagen='$this->imagen',
+          imagen=$this->imagen,
           fk_idcategoria=$this->fk_idcategoria,
           descripcion='$this->descripcion'
           
@@ -132,8 +131,10 @@ class Producto extends Model
             2 => 'A.cantidad',
             3 => 'A.precio',
             4 => 'A.imagen',
-            5 => 'B.nombre',
+            5 => 'A.categoria',
             6 => 'A.descripcion'
+            
+            
         );
         $sql = "SELECT DISTINCT
                     A.idproducto,
@@ -141,7 +142,8 @@ class Producto extends Model
                     A.cantidad,
                     A.precio,
                     A.imagen,
-                    B.nombre AS categoria
+                    A.fk_idcategoria,
+                    B.nombre AS categoria,
                     A.descripcion
                    
                     FROM productos A

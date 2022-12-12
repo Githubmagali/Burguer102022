@@ -100,12 +100,7 @@ class ControladorEstado extends Controller
                     $productAnt = new Estado();
                     $productAnt->obtenerPorId($entidad->idestado);
 
-                    if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK){
-                        //Eliminar imagen anterior
-                        unlink("../public/files/$productAnt->imagen");                           
-                    } else {
-                        $entidad->imagen = $productAnt->imagen;
-                    }
+                    
 
                     $entidad->guardar();
 

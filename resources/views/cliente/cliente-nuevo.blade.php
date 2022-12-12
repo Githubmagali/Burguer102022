@@ -47,6 +47,7 @@ if (isset($msg)){
             <div class="row">
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
                 <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
+                
                 <div class="form-group col-lg-12">
                 <label>Nombre: *</label>
                     <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$cliente->nombre}}" required>
@@ -58,6 +59,18 @@ if (isset($msg)){
                 <div class="form-group col-lg-12">
                 <label>Correo: *</label>
                     <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="{{$cliente->correo}}" required>
+                </div>
+                <div class="form-group col-lg-12">
+                <label>DNI: *</label>
+                    <input type="text" id="txtDni" name="txtDni" class="form-control" value="{{$cliente->dni}}" required>
+                </div>
+                <div class="form-group col-lg-12">
+                <label>Celular: *</label>
+                    <input type="text" id="txtCelular" name="txtCelular" class="form-control" value="{{$cliente->celular}}" required>
+                </div>
+                <div class="form-group col-lg-12">
+                <label>Clave: *</label>
+                    <input type="text" id="txtClave" name="txtClave" class="form-control" value="{{$cliente->clave}}" required>
                 </div>
 </div>
 </form>
@@ -94,22 +107,23 @@ if (isset($msg)){
         }
     }
 
-    function eliminar() { //funcion de javascript
+    function eliminar() { //funcion de javascript; se ejecuta del lado del cliente (frontend)
         $.ajax({
-            type: "GET",
+            type: "GET", //al enviarlo por GET viaja via la query stream
             url: "{{ asset('admin/cliente/eliminar') }}", //hace una peticion al servidor via GET
             data: { id:globalId }, //EN USUARIO ENVIA 'admin/cliente/eliminar' y envia 'data' via 'GET', AL ENVIARLA VIA get VIAJA POR QUERY STRIM
             async: true, //es de forma sincronica porque si hago click en eliminar me permite que mientras trabaja en la secuencia de eliminar me permite seguir trabaajando
-            dataType: "json", //los datos viajan en json que se comunica bajo difrentes tecnologias en este caso frnt con php
+            dataType: "json", //los datos viajan en json que se comunica bajo difrentes tecnologias en este caso javascript (frondend) con php (backend)
             success: function (data) { //success indica que va  hacer el servidor
                 if (data.err = "0") { //si data.err es 0 = 'registro eliminado correctamente'
                     msgShow("Registro eliminado exitosamente.", "success");
                     $("#btnEnviar").hide(); //hide oculta botones
                     $("#btnEliminar").hide();
-                    $('#mdlEliminar').modal('toggle');
+                    $('#mdlEliminar').modal('toggle'); //modal muestra otra cosa
                 } else {
                     msgShow("Error al eliminar", "success");
-                }
+                } //para que la funcion 'elimina' se cumpla tengo que hacer una ruta donde viaja la info
+                // ge('admin/cliente/eliminar', 'ControladorCliente@eliminar')
             }
         });
     }

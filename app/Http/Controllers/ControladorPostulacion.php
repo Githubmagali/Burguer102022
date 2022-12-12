@@ -63,7 +63,7 @@ class ControladorPostulacion extends Controller
             $row[] = $aPostulaciones[$i]->nombre. "" . $aPostulaciones[$i]->apellido;
             $row[] = $aPostulaciones[$i]->celular;
             $row[] = $aPostulaciones[$i]->correo;
-            $row[] = "<a href='/files". $aPostulaciones[$i]->curriculum."' class='btn btn-secondary'><i class='fa-solid fa-pencil'></i></a>";
+            $row[] = "<a href='files/". $aPostulaciones[$i]->curriculum."' class='btn btn-secondary'><i class='fa-solid fa-pencil'></i></a>";
             $cont++;
             $data[] = $row;
         }

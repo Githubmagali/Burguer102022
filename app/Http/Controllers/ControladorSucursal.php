@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Entidades\Sucursal; //include_once "app/Entidades/Sistema/Menu.php";
-
+use App\Entidades\Sucursal; 
 use App\Entidades\Sistema\Patente;
 use App\Entidades\Sistema\Usuario;
 use Illuminate\Http\Request;
@@ -15,8 +14,7 @@ class ControladorSucursal extends Controller
     public function nuevo()
     {   
         $titulo = "Nuevo Sucursal";
-
-        if (Usuario::autenticado() == true) { //validación
+            if (Usuario::autenticado() == true) { //validación
             if (!Patente::autorizarOperacion("SUCURSALCONSULTA")) { //otra validación
                 $codigo = "SUCURSALCONSULTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
@@ -85,32 +83,13 @@ class ControladorSucursal extends Controller
             $titulo = "Modificar sucursal";
             $entidad = new Sucursal();
             $entidad->cargarDesdeRequest($request); //agarra el request del formulario y lo carga al propio objeto
-
-            if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) { //Se adjunta imagen
-                $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
-                 $nombre = date("Ymdhmsi") . ".$extension";
-                 $archivo = $_FILES["archivo"]["tmp_name"];
-                 move_uploaded_file($archivo, env('APP_PATH') . "/public/files/$nombre"); //guardaelarchivo
-                 $entidad->imagen = $nombre;
-             }
-            
-            //validaciones
-            if ($entidad->nombre == "") {
-                $msg["ESTADO"] = MSG_ERROR;
-                $msg["MSG"] = "Complete todos los datos";
-            } else {
-                if ($_POST["id"] > 0) {
-                    //Es actualizacion
-                    $productAnt = new Sucursal();
-                    $productAnt->obtenerPorId($entidad->idsucursal);
-
-
-                    if($_FILES["archivo"]["error"] === UPLOAD_ERR_OK){
-                        //Eliminar imagen anterior
-                        unlink("../public/files/$productAnt->imagen");                           
-                    } else {
-                        $entidad->imagen = $productAnt->imagen;
-                    }
+ //validaciones
+ if ($entidad->nombre == "") {
+    $msg["ESTADO"] = MSG_ERROR;
+    $msg["MSG"] = "Complete todos los datos";
+} else {
+    if ($_POST["id"] > 0) {
+        //Es actualizacion
 
                     $entidad->guardar();
 

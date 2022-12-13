@@ -35,16 +35,18 @@
 <body>
 
   <div class="hero_area">
+    @if(isset($pg) && $pg == "home") <!--Si pg esta seteado(isset) y pg es igual a home el resultado es la sig imagen-->
     <div class="bg-box">
       <img src="web/images/hero-bg.jpg" alt="">
     </div>
+    @endif
     <!-- header section strats -->
     <header class="header_section">
       <div class="container">
         <nav class="navbar navbar-expand-lg custom_nav-container ">
           <a class="navbar-brand" href="index.html">
             <span>
-              Feane
+             Burguer
             </span>
           </a>
 
@@ -134,7 +136,7 @@
                 </button>
               </form>
               <a href="" class="order_online">
-                Order Online
+                Ingresar
               </a>
             </div>
           </div>

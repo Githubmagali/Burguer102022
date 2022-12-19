@@ -21,9 +21,8 @@ class ControladorCliente extends Controller
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
-                
-                $cliente = New Cliente();
-               return view( 'cliente.cliente-nuevo', compact ('titulo','cliente') );
+                 $cliente = New Cliente();
+               return view( 'cliente.cliente-nuevo', compact ('titulo','cliente'));
             }
         } else {
             return redirect('admin/login');

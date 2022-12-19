@@ -44,7 +44,7 @@ if (isset($msg)){
     }
     ?>
 <form id="form1" method="POST"enctype="multipart/form-data">
-            <div class="row">
+            <div class="row"><!--input type="hidden" genera un token que permite que la web sea segura, que un robot no pase por el sistema, tiene que estar en todo formulario del laravel, sino dice que expira-->
                 <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
                 <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                 <div class="form-group col-lg-12">

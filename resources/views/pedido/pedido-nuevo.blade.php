@@ -92,7 +92,7 @@ if (isset($msg)) {
 
                     @foreach($aEstados as $item)
                     @if ($item->idestado == $pedido->fk_idestado)
-                    
+                  
                     <option value="{{ $item->idestado}}">{{ $item->nombre}}</option>
                     @endif
                    @endforeach

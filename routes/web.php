@@ -18,9 +18,18 @@ Route::group(array('domain' => '127.0.0.1'), function () {
 
     Route::get('/', 'ControladorWebHome@index'); //abre el index de nuestra pag web
     Route::get('/takeaway', 'ControladorWebTakeaway@index');
-    Route::get('/nosotros', 'ControladorWebNosotros@index'); 
+    Route::get('/nosotros', 'ControladorWebNosotros@index'); //index va a mostrar la pagina
+    Route::get('/gacias-postulacion', 'ControladorWebGraciasPostulacion@index'); 
+    Route::post('/nosotros', 'ControladorWebNosotros@enviar'); 
     Route::get('/contacto', 'ControladorWebContacto@index');
+    Route::post('/contacto', 'ControladorWebContacto@enviar');
     Route::get('/mi-cuenta', 'ControladorWebMiCuenta@index');
+    Route::get('/recuperar-clave', 'ControladorWebRecuperarClave@index');
+    Route::get('/login', 'ControladorWebLogin@index');
+    Route::post('/login', 'ControladorWebLogin@ingresar');
+    Route::get('/nuevo-registro', 'ControladorWebNuevoRegistro@index');
+    Route::post('/nuevo-registro', 'ControladorWebNuevoRegistro@enviar'); 
+    Route::get('/reserva-mesa', 'ControladorWebReservaMesa@index');
 
     Route::get('/admin', 'ControladorHome@index');
     Route::post('/admin/patente/nuevo', 'ControladorPatente@guardar');

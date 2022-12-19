@@ -16,8 +16,8 @@ class ControladorPostulacion extends Controller
         $titulo = "Nuevo Postulacion";
 
         if (Usuario::autenticado() == true) { //validación
-            if (!Patente::autorizarOperacion("PROSTULACIONCONSULTA")) { //otra validación
-                $codigo = "POSTULACIONCONSULTA";
+            if (!Patente::autorizarOperacion("POSTULANTEALTA")) { //otra validación
+                $codigo = "POSTULANTEALTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
@@ -145,9 +145,6 @@ class ControladorPostulacion extends Controller
                 $mensaje = "No tiene pemisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
-               
-                
-
                 $postulacion = new Postulacion();
                 $postulacion->obtenerPorId($id);
 
@@ -163,7 +160,7 @@ public function eliminar(Request $request)
         $id = $request->input('id');
 
         if (Usuario::autenticado() == true) {
-            if (Patente::autorizarOperacion("POSTULANTEELIMINAR")) {
+            if (Patente::autorizarOperacion("POSTULANTEBAJA")) {
 
               
                 $entidad = new Postulacion();

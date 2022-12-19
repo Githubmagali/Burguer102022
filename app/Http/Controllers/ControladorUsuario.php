@@ -44,7 +44,7 @@ class ControladorUsuario extends Controller
                 $usuario = new Usuario();
 
                 /* CAMBIOS PARA EL DESPLEGABLE */
-                $area = new Area();
+                $area = new Area(); //crea una instancia $area
                 $array_area =  $area->obtenerTodos();
 
                 $grupo = new Area();

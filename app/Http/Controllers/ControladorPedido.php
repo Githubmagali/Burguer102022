@@ -30,7 +30,7 @@ class ControladorPedido extends Controller
                 $cliente = New Cliente();
                 $aClientes = $cliente->obtenerTodos();
                 $estado = New Estado();
-                $aEstados = $cliente->obtenerTodos();
+                $aEstados = $estado->obtenerTodos();
            
                return view( 'pedido.pedido-nuevo', compact ('titulo','pedido', 'aSucursales', 'aClientes', 'aEstados') );
             }

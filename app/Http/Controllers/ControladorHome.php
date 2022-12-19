@@ -11,8 +11,9 @@ class ControladorHome extends Controller
 
     public function index(){
       
-        $titulo="Inicio";
+        
         if (Usuario::autenticado() == true) {
+            $titulo="Inicio";
             if (!Patente::autorizarOperacion("MENUCONSULTA")) {
                 $codigo = "MENUCONSULTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";

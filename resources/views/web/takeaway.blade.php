@@ -27,14 +27,14 @@
                 </div>
                 <div class="detail-box">
                   <h5>
-                    Delicious Pizza
+                    Pizza 4 quesos
                   </h5>
                   <p>
-                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
+                  Queso roquefort, muzzarella, cheddar y cremoso, masa hecha de la mano de nuestros chefs
                   </p>
                   <div class="options">
                     <h6>
-                      $20
+                      $40
                     </h6>
                     <a href="">
                       <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
@@ -103,14 +103,14 @@
                 </div>
                 <div class="detail-box">
                   <h5>
-                    Delicious Burger
+                  Burger XXL
                   </h5>
                   <p>
-                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
+                  Hamburguesa extra grande, Carne de pastura, con verduras organicas y condimentos naturales
                   </p>
                   <div class="options">
                     <h6>
-                      $15
+                      $34
                     </h6>
                     <a href="">
                       <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
@@ -179,14 +179,13 @@
                 </div>
                 <div class="detail-box">
                   <h5>
-                    Delicious Pizza
+                    Pizza al curry
                   </h5>
                   <p>
-                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
-                  </p>
+                  Pizza con un queso de alta calidad con albahaca organica, masa hecha de la mano de nuestros chefs
                   <div class="options">
                     <h6>
-                      $17
+                      $28
                     </h6>
                     <a href="">
                       <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
@@ -255,10 +254,10 @@
                 </div>
                 <div class="detail-box">
                   <h5>
-                    Delicious Pasta
+                    Pasta
                   </h5>
                   <p>
-                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
+                   Pasta casera, amasada a mano, con harina organica, salsa casera sin condimentos artificiales
                   </p>
                   <div class="options">
                     <h6>
@@ -331,10 +330,10 @@
                 </div>
                 <div class="detail-box">
                   <h5>
-                    French Fries
+                    Papas fritas
                   </h5>
                   <p>
-                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
+                   Fritura de aceite de alta calidad, papas organicas
                   </p>
                   <div class="options">
                     <h6>
@@ -407,10 +406,10 @@
                 </div>
                 <div class="detail-box">
                   <h5>
-                    Delicious Pizza
+                   Pizza
                   </h5>
                   <p>
-                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
+                   Pizza con un queso de alta calidad, masa hecha de la mano de nuestros chefs
                   </p>
                   <div class="options">
                     <h6>
@@ -483,10 +482,10 @@
                 </div>
                 <div class="detail-box">
                   <h5>
-                    Tasty Burger
+                   Burger
                   </h5>
                   <p>
-                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
+                    Hamburguesa clasica, Carne de pastura, con verduras organicas y condimentos naturales
                   </p>
                   <div class="options">
                     <h6>
@@ -559,10 +558,10 @@
                 </div>
                 <div class="detail-box">
                   <h5>
-                    Tasty Burger
+                    Burger XL
                   </h5>
                   <p>
-                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
+                    Carne de pastura, con verduras organicas y condimentos naturales
                   </p>
                   <div class="options">
                     <h6>
@@ -635,10 +634,10 @@
                 </div>
                 <div class="detail-box">
                   <h5>
-                    Delicious Pasta
+                    Pasta gourmet
                   </h5>
                   <p>
-                    Veniam debitis quaerat officiis quasi cupiditate quo, quisquam velit, magnam voluptatem repellendus sed eaque
+                    Pasta casera de nuestros chefs, especialidad de la casa 
                   </p>
                   <div class="options">
                     <h6>

@@ -16,14 +16,17 @@ class ControladorWebNosotros extends Controller //permita que todos accedan sin 
         $postulacion= new Postulacion();
         $aPostulaciones = $sucursal->obtenerTodos();
 
+        //LAS VARIABLES SE ENVIAN AL BLADE VIA COMPACT
 
             return view("web.nosotros", compact('pg','aSucursales', 'aPostulaciones'));
     }
     public function enviar(Request $request){ //colocamos los datos que enviamos, recorda ubicarlo en la ruta via POST
+        //cada vez que enviamos algo necesitamos capturarlo desde el request del Laravel, donde estaran los datos del formulario
         $nombre= $request->input('TxtNombre');
         $apellido= $request->input('TxtApellido');
         $celular= $request->input('TxtCelular');
         $correo= $request->input('TxtCorreo');
+   
         
          $postulacion = new Postulacion(); //toda la info va a estar almacenada aca por ende creamos este objeto
            $postulacion->nombre =$nombre;

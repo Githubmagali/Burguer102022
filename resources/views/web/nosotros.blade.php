@@ -49,9 +49,7 @@
               <h6>
                 Moana Michell
               </h6>
-              <p>
-                algunas cosas geniales
-              </p>
+          
 
             </div>
             <div class="img-box">
@@ -68,9 +66,6 @@
               <h6>
                 Mike Hamell
               </h6>
-              <p>
-                magna aliqua
-              </p>
             </div>
             <div class="img-box">
               <img src="web/images/client2.jpg" alt="" class="box-img">
@@ -85,7 +80,7 @@
 <section class="book_section layout_padding-bottom">
   <div class="container">
     <div class="py-5 txt-center heading_container text_center">
-      <h2>
+ <h2>
         Trabaja con nosotros!
       </h2>
     </div>

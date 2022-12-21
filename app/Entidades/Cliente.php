@@ -29,7 +29,7 @@ class Cliente extends Model
         $this->correo = $request->input('txtCorreo');
         $this->dni = $request->input('txtDni');
         $this->celular = $request->input('txtCelular');
-        $this->clave = $request->input('txtClave');
+        $this->clave= password_hash($request->input('txtClave'), PASSWORD_DEFAULT);
     }
 
     public function insertar()
@@ -163,5 +163,23 @@ class Cliente extends Model
         $lstRetorno = DB::select($sql);
 
         return $lstRetorno;
+    }
+
+    public function obtenerPorCorreo($correo)
+    {
+        $sql = "SELECT
+        idcliente,
+        correo,
+        clave
+        FROM clientes WHERE correo = 'correo'";
+        $lstRetorno = DB::select($sql, [$correo]);
+
+        if(count($lstRetorno) > 0){
+            $this->idcliente = $lstRetorno[0]->idcliente;
+            $this->correo = $lstRetorno[0]->correo;
+            $this->clave= $lstRetorno[0]->clave;
+            return $this;
+        }
+        return null;
     }
 }

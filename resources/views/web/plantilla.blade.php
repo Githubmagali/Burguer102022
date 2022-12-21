@@ -30,23 +30,29 @@
   <!-- responsive style -->
   <link href="web/css/responsive.css" rel="stylesheet" />
 
+
 </head>
+@if(isset($pg) && $pg == "inicio")
+
 
 <body>
 
+  @else
   <div class="hero_area">
-    @if(isset($pg) && $pg == "home")
     <!--Si pg esta seteado(isset) y pg es igual a home el resultado es la sig imagen-->
     <div class="bg-box">
-      <img src="web/images/about-img.png" alt="">
+      <img src="web/images/hero-bg.jpg" class="img-fluid" alt="">
+
     </div>
     @endif
     <!-- header section strats about_section pone en negrita el fondo -->
-    <header class="header_section about_section"> 
-    
+    <header class="header_section about_section">
+
       <div class="container">
-        <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="index.html">
+        <nav class="navbar navbar-expand-lg custom_nav-container">
+
+
+          <a class="navbar-brand" href="/">
             <span>
               Burguer
             </span>
@@ -57,8 +63,8 @@
           </button>
 
           <div class="navbar-collapse" id="navbarSupportedContent">
-  
-            <ul class="navbar-nav  mx-auto "> 
+
+            <ul class="navbar-nav  mx-auto ">
               <li class="nav-item active">
                 <a class="nav-link" href="/">Inicio</a>
               </li>
@@ -77,7 +83,7 @@
             </ul>
             <div class="user_option">
               <a href="" class="user_link">
-                <i class="fa fa-user" aria-hidden="true"></i>
+
               </a>
               <a class="cart_link" href="#">
                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
@@ -138,7 +144,7 @@
                   <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
               </form>
-              <a href="/login" class="order_online">
+              <a href="/login" class="order_online"><i class="fa fa-user" aria-hidden="true"></i>
                 Ingresar
               </a>
             </div>
@@ -164,40 +170,36 @@
               </h4>
               <div class="contact_link_box">
                 <a target="_blank" href="">
-                <i class="fa fa-phone" aria-hidden="true"></i>
+                  <i class="fa fa-phone" aria-hidden="true"></i>
                   <span>
                     {{$sucursal->telefono}}
                   </span>
                 </a>
                 <a href="">
-                  
+
                   <span>
                     {{$sucursal->direccion}}
                   </span>
                 </a>
                 <a target="_blank" href="">
                   <span>
-                 {{$sucursal->linkmapa}}
+                    {{$sucursal->linkmapa}}
                   </span>
                 </a>
               </div>
             </div>
           </div>
           @endforeach
-          <div class="footer-info">
-            <div class="container">
-              <div class="row">
-               <p>
-              &copy; <span id="displayYear"></span>All right reserved By
-              <a href="https://html.desing/">Free html Templates</a><br>
-              &copy; <span id="displayYear"></span>Distributed By
-              <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
-            </p>
-            </div>
-          
-          </div>
         </div>
+        <div class="footer-info">
+          <p>
+            &copy; <span id="displayYear"></span>All right reserved By
+            <a href="https://html.desing/">Free html Templates</a><br>
+            &copy; <span id="displayYear"></span>Distributed By
+            <a href="https://themewagon.com/" target="_blank">ThemeWagon</a>
+          </p>
         </div>
+      </div>
     </footer>
     <!-- footer section -->
 

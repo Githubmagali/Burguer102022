@@ -18,6 +18,13 @@ class ControladorWebContacto extends Controller //permita que todos accedan sin 
             return view("web.contacto",compact('pg','aSucursales'));
     }
 
-  
+  public function enviar(Request $request){
+    $nombre= $request->input('txtNombre');
+    $celular=$request->input('txtTelefono');
+    $correo=$request->input('txtCorreo');
+    $mensaje=$request->input('txtMensaje');
+
+    return redirect("/confirmacion-envio");
+  }
  
     }

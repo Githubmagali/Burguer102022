@@ -12,6 +12,7 @@ class ControladorWebMiCuenta extends Controller //permita que todos accedan sin 
         $sucursal = new Sucursal();
         $aSucursales = $sucursal->obtenerTodos();
         
-            return view("web.mi-cuenta", compact('pg','aSucursales'));
+            return view("web.mi-cuenta", compact('pg','aSucursales')); 
+            //el controlador se comunica con el blade a traves de compact
     }
 }

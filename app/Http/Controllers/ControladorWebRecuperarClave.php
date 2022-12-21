@@ -9,6 +9,7 @@ class ControladorWebRecuperarClave extends Controller //permita que todos acceda
     public function index()
     {
         $pg='recuperar-clave';
+      
 
         $sucursal = new Sucursal();
         $aSucursales = $sucursal->obtenerTodos();

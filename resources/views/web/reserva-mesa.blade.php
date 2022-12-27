@@ -14,13 +14,13 @@
           <div class="form_container">
             <form action="">
               <div>
-                <input type="text" class="form-control" placeholder="Your Name" />
+                <input type="text" class="form-control" placeholder="Nombre" />
               </div>
               <div>
-                <input type="text" class="form-control" placeholder="Phone Number" />
+                <input type="text" class="form-control" placeholder="Numero" />
               </div>
               <div>
-                <input type="email" class="form-control" placeholder="Your Email" />
+                <input type="email" class="form-control" placeholder="Email" />
               </div>
               <div>
                 <select class="form-control nice-select wide">
@@ -63,9 +63,7 @@
                 <input type="date" class="form-control">
               </div>
               <div class="btn_box">
-                <button>
-                  Reservar ahora
-                </button>
+              <button  type="submit" href="/nosotros">Reservar </button>
               </div>
             </form>
           </div>

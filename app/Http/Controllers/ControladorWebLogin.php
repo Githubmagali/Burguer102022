@@ -26,6 +26,7 @@ if($cliente->idcliente > 0 && password_verify($clave, $cliente->clave)){ //si cl
  return redirect("/mi-cuenta");
    }else {
     $msg="Usuario o clave incorrecta";
+    
     $sucursal = new Sucursal();
     $aSucursales = $sucursal->obtenerTodos();
     return view("web.login", compact('msg', 'aSucursales')); //al redirect no podemos pasar variable via compact

@@ -5,13 +5,16 @@
     <section class="slider_section about_section">
    
       <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+      <div class="bg-box">
+        <img src="web/images/hero-bg.jpg" alt="">
+      </div>
         <div class="carousel-inner">
           <div class="carousel-item active">
             <div class="container ">
               <div class="row">
                 <div class="col-md-7 col-lg-6 ">
                   <div class="detail-box">
-               
+                  
                     <h1>
                      Hamburguesas
                     </h1>
@@ -91,8 +94,9 @@
     <div class="offer_container">
       <div class="container ">
         <div class="row">
-          <div class="col-md-6  ">
+          <div class="col-md-6">
             <div class="box ">
+           
               <div class="img-box">
                 <img src="web/images/o1.jpg" alt="">
               </div>
@@ -167,7 +171,7 @@
               </div>
               <div class="detail-box">
                 <h5>
-                  Pizza Days
+                  Pizza 
                 </h5>
                 <h6>
                   <span>15%</span> Off
@@ -237,4 +241,3 @@
 
   
 @endsection
- 

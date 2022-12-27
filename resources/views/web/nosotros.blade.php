@@ -6,7 +6,7 @@
      <div class="row">
       <div class="col-md-6 ">
         <div class="img-box">
-        <img src="web/images/about-img.png" alt="">
+        <img src="web/images/f7.png" alt="">
         </div>
       </div>
       <div class="col-md-6">
@@ -80,7 +80,7 @@
 <section class="book_section layout_padding-bottom">
   <div class="container">
     <div class="py-5 txt-center heading_container text_center">
- <h2>
+ <h2 class="text-white">
         Trabaja con nosotros!
       </h2>
     </div>
@@ -93,25 +93,25 @@
             <!--enctype="multipart/form-data" hace que se envie el archivo-->
             <div>
 
-              <label>Nombre: *</label>
-              <input type="text" id="txtNombre" name="txtNombre" class="form-control" required>
+            
+              <input type="text" id="txtNombre" name="txtNombre" class="form-control" placeholder="Nombre" required>
             </div>
             <div>
-              <label>Apellido: *</label>
-              <input type="text" id="txtApellido" name="txtApellido" class="form-control" required>
+             
+              <input type="text" id="txtApellido" name="txtApellido" class="form-control" placeholder="Apellido" required>
             </div>
             <div>
-              <label>Celular: *</label>
-              <input type="text" id="txtCelular" name="txtCelular" class="form-control" required>
+              
+              <input type="text" id="txtCelular" name="txtCelular" class="form-control" placeholder="Celular" required>
             </div>
             <div>
-              <label>Correo: *</label>
-              <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" required>
+             
+              <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" placeholder="Correo"required>
             </div>
-            <label>CV:</label>
+            <label></label>
             <input type="file" id="archivo" name="archivo" class="">
 
-            <div class="btn_box txt_center">
+            <div class="btn-bot text-center">
               <button type="submit" href="/gracias-postulacion">
                 Enviar
               </button>

@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Entidades\Estado; //include_once "app/Entidades/Sistema/Menu.php";
-
 use App\Entidades\Sistema\Patente;
 use App\Entidades\Sistema\Usuario;
 use Illuminate\Http\Request;
@@ -14,26 +13,26 @@ class ControladorEstado extends Controller
 {
     public function nuevo()
     {   
+        
         $titulo = "Nuevo Estado";
-
         if (Usuario::autenticado() == true) { //validación
-            if (!Patente::autorizarOperacion("ESTADOCONSULTA")) { //otra validación
-                $codigo = "ESTADOCONSULTA";
+            if (!Patente::autorizarOperacion("ESTADOALTA")) { //otra validación
+                $codigo = "ESTADOALTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
-                $estado = New Estado();
-               return view( 'estado.estado-nuevo', compact ('titulo','estado') );
+                 $estado = New Estado();
+               return view( 'estado.estado-nuevo', compact ('titulo','estado'));
             }
         } else {
             return redirect('admin/login');
         }
     }
-    public function index()
+    public function index() //carga la pantlla
     {
         $titulo = "Listado de estados";
         if (Usuario::autenticado() == true) {
-            if (!Patente::autorizarOperacion("ESTADOCONSULTA")) {
+            if (!Patente::autorizarOperacion("ESTADOCONSULTA")) { //consulta si tiene el permiso
                 $codigo = "ESTADOCONSULTA";
                 $mensaje = "No tiene permisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
@@ -44,51 +43,52 @@ class ControladorEstado extends Controller
             return redirect('admin/login');
         }
     }
+
     public function cargarGrilla()
     {
         $request = $_REQUEST;
 
-        $entidad = new Estado();
-        $aEstados = $entidad->obtenerFiltrado();
-
+        $entidad = new Estado(); //primero vamosa la base de datos
+        $aEstados = $entidad->obtenerFiltrado(); //llama al metodo para que me devuelva los datos figurados
+//def en la entidad cliente
         $data = array();
-        $cont = 0;
+        $cont = 0; //le devuelve los datos del array recorrido
+        //tenemos que armar el json solo la cantidad de registros indicada
 
-        $inicio = $request['start'];
-        $registros_por_pagina = $request['length'];
+        $inicio = $request['start']; //de donde va a empezar
+        $registros_por_pagina = $request['length']; //cant de registros por pag
 
 
         for ($i = $inicio; $i < count($aEstados) && $cont < $registros_por_pagina; $i++) {
-            $row = array();
-            $row[] = $aEstados[$i]->nombre;
-         
-            $cont++;
-            $data[] = $row;
+            $row = array(); //el inicio lo calcula la grilla y lo va a hacer mientras alla la cant
+            //de clientes posibles y ademas sea la cant de clientes a mostrar
+            $row[] = "<a href= '/admin/estado/" . $aEstados[$i]->idestado. "'class='btn btn-secondary'><i class='fa-solid fa-pencil'></i></a>";
+           
+           
+            $cont++; //crea una fila con datos
+            $data[] = $row; //lo agrega a data, despues lo adjunta en el json
         }
-// formauna fila, lo adjunta en el array de data y json adjunta los datos del array conviertiendose en un json
-        $json_data = array(
+
+        $json_data = array( //json pide que tenga esta serie de datos
             "draw" => intval($request['draw']),
             "recordsTotal" => count($aEstados), //cantidad total de registros sin paginar
             "recordsFiltered" => count($aEstados), //cantidad total de registros en la paginacion
-            "data" => $data,
+            "data" => $data, //datos del array
         );
-        return json_encode($json_data);
+        return json_encode($json_data); //devuelve el json convertido
     }
+
+  
+
     public function guardar(Request $request) {
         try {
             //Define la entidad servicio
-            $titulo = "Modificar estado";
+            $titulo = "Modificar Estado";
             $entidad = new Estado();
             $entidad->cargarDesdeRequest($request); //agarra el request del formulario y lo carga al propio objeto
 
-            if ($_FILES["archivo"]["error"] === UPLOAD_ERR_OK) { //Se adjunta imagen
-                $extension = pathinfo($_FILES["archivo"]["name"], PATHINFO_EXTENSION);
-                 $nombre = date("Ymdhmsi") . ".$extension";
-                 $archivo = $_FILES["archivo"]["tmp_name"];
-                 move_uploaded_file($archivo, env('APP_PATH') . "/public/files/$nombre"); //guardaelarchivo
-                 $entidad->imagen = $nombre;
-             }
-            
+
+           
             //validaciones
             if ($entidad->nombre == "") {
                 $msg["ESTADO"] = MSG_ERROR;
@@ -96,10 +96,7 @@ class ControladorEstado extends Controller
             } else {
                 if ($_POST["id"] > 0) {
                     //Es actualizacion
-
-                    $productAnt = new Estado();
-                    $productAnt->obtenerPorId($entidad->idestado);
-
+                  
                     
 
                     $entidad->guardar();
@@ -121,43 +118,44 @@ class ControladorEstado extends Controller
         }
 
         $id = $entidad->estado;
-        $estado = new Estado();
+        $estado = new Estado(); 
         $estado->obtenerPorId($id);
 
         return view('estado.estado-nuevo', compact('msg', 'estado', 'titulo')) . '?id=' . $estado->idestado;
 
     }
-    public function editar($id)
+    public function editar($id) //viene el id por parametro
     {
-        $titulo = "Modificar cliente";
-        if (Usuario::autenticado() == true) {
+        $titulo = "Modificar estado";
+        if (Usuario::autenticado() == true) { //pregunta si el usuario esta autenticado ya que no cualquiera puede editar
             if (!Patente::autorizarOperacion("ESTADOEDITAR")) {
                 $codigo = "ESTADOEDITAR";
                 $mensaje = "No tiene pemisos para la operaci&oacute;n.";
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
                
-             $estado = new Estado();
-                $estado->obtenerPorId($id);
-                return view('estado.estado-nuevo', compact('estado', 'titulo'));
+                $estado = new Estado(); //va a la base de datos
+                $estado->obtenerPorId($id); //busca por el id que vino por parametro que lo envio la hoja de rutar
+
+                return view('estado.estado-nuevo', compact('menu', 'titulo'));
             }
         } else {
             return redirect('admin/login');
         }
-    
+    }
 
-}
-public function eliminar(Request $request)
+    public function eliminar(Request $request) //el eliminar viaja por ajax y se puede ver en la consola de la pagina 'Red'
     {
-        $id = $request->input('id');
+        $id = $request->input('id'); //recupera el id que vino por la querystream por la propiedad $request
 
-        if (Usuario::autenticado() == true) {
+        if (Usuario::autenticado() == true) { //pregunata si el usuario esta autenticado porque no cualquiera pueda eliminar
             if (Patente::autorizarOperacion("ESTADOBAJA")) {
 
               
-                $entidad = new Estado();
+                $entidad = new Estado(); //llama a la entidad
                 $entidad->cargarDesdeRequest($request);
-                              
+                $entidad->eliminar();
+               
                 $entidad->eliminar();
 
                 $aResultado["err"] = EXIT_SUCCESS; //eliminado correctamente
@@ -170,5 +168,6 @@ public function eliminar(Request $request)
             return redirect('admin/login');
         }
     }
+
 
 }

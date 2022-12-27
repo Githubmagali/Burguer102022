@@ -40,7 +40,7 @@
   @else
   <div class="hero_area">
     <!--Si pg esta seteado(isset) y pg es igual a home el resultado es la sig imagen-->
-    <div class="bg-box">
+    <div class="bg-box img_fluid">
       <img src="web/images/hero-bg.jpg" class="img-fluid" alt="">
 
     </div>

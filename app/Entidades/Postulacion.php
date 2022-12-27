@@ -60,7 +60,7 @@ public function obtenerTodos()
                 A.celular,
                 A.correo,
                 A.curriculum
-              FROM $this->table A BY A.idpostulacion DESC";
+              FROM postulaciones A BY A.nombre";
       $lstRetorno = DB::select($sql);
       return $lstRetorno;
   }

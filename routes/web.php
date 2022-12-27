@@ -33,7 +33,8 @@ Route::group(array('domain' => '127.0.0.1'), function () {
     Route::get('/confirmacion-envio', 'ControladorWebConfirmacionEnvio@index');
     Route::get('/admin', 'ControladorHome@index');
     Route::post('/admin/patente/nuevo', 'ControladorPatente@guardar');
-
+    Route::get('/practica', 'ControladorWebPractica@index');
+   
 /* --------------------------------------------- */
 /* CONTROLADOR LOGIN                           */
 /* --------------------------------------------- */

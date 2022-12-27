@@ -11,6 +11,7 @@ class ControladorWebTakeaway extends Controller //permita que todos accedan sin 
 {
     public function index()
     {
+        $pg = "takeaway";
         $producto = new Producto();
         $aProductos = $producto->obtenerTodos();
 
@@ -20,8 +21,8 @@ class ControladorWebTakeaway extends Controller //permita que todos accedan sin 
         $sucursal = new Sucursal();
         $aSucursales = $sucursal->obtenerTodos();
 
-        $pg = "takeaway";
-            return view("web.takeaway", compact('pg', 'producto', 'aProductos','aCategorias', 'aSucursales'));
+        
+return view("web.takeaway", compact('pg', 'aProductos','aCategorias', 'aSucursales'));
 
             
     }

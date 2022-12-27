@@ -223,7 +223,7 @@ if (isset($msg)) {
                 }
                 @php ($pos = 2)
                 @foreach($array_grupo as $grupo)
-                ,
+                
                 {
                     "targets": [@php (print_r($pos))],
                     "visible": true,
